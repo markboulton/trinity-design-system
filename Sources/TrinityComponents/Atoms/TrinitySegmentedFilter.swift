@@ -50,7 +50,7 @@ public struct TrinitySegmentedFilter<Option: Hashable>: View {
                                 ? theme.accent
                                 : theme.labelSecondary
                         )
-                        .padding(.horizontal, 14)
+                        .padding(.horizontal, TrinitySpacing.lg)
                         .padding(.vertical, TrinitySpacing.xs)
                         .background(
                             Capsule()

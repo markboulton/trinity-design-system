@@ -1,5 +1,5 @@
 import Testing
 @testable import TrinityTheme
 
-// Placeholder — tests will be added when the Theme protocol is implemented.
+// Bootstrap placeholder — real tests are in ThemeConformanceTests.swift.
 struct TrinityThemeTests {}

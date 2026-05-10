@@ -164,13 +164,13 @@ public struct TrinityMarkerBar: View {
         }
     }
 
-    private func formatTick(_ v: Double) -> String {
-        if v == v.rounded() {
-            return String(format: "%.0f", v)
-        } else if v < 10 {
-            return String(format: "%.2f", v)
+    private func formatTick(_ tick: Double) -> String {
+        if tick == tick.rounded() {
+            return String(format: "%.0f", tick)
+        } else if tick < 10 {
+            return String(format: "%.2f", tick)
         } else {
-            return String(format: "%.1f", v)
+            return String(format: "%.1f", tick)
         }
     }
 }

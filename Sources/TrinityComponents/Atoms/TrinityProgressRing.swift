@@ -5,8 +5,8 @@ import TrinityTheme
 // Internal constants used as default parameter values in TrinityProgressRing.init.
 // @usableFromInline is required so public inits can reference them.
 // Public-facing aliases are exposed as static properties on the struct below.
-@usableFromInline let _progressRingDefaultSize: CGFloat = 80
-@usableFromInline let _progressRingDefaultLineWidth: CGFloat = 8
+@usableFromInline let progressRingDefaultSize: CGFloat = 80
+@usableFromInline let progressRingDefaultLineWidth: CGFloat = 8
 
 /// Circular progress arc with optional centre and caption labels.
 ///
@@ -21,9 +21,9 @@ import TrinityTheme
 public struct TrinityProgressRing: View {
 
     /// Default ring diameter (80pt).
-    public static let defaultSize: CGFloat = _progressRingDefaultSize
+    public static let defaultSize: CGFloat = progressRingDefaultSize
     /// Default stroke width (8pt).
-    public static let defaultLineWidth: CGFloat = _progressRingDefaultLineWidth
+    public static let defaultLineWidth: CGFloat = progressRingDefaultLineWidth
 
     @Environment(\.theme) private var theme
 
@@ -39,8 +39,8 @@ public struct TrinityProgressRing: View {
         tint: Color? = nil,
         centreLabel: String? = nil,
         captionLabel: String? = nil,
-        size: CGFloat = _progressRingDefaultSize,
-        lineWidth: CGFloat = _progressRingDefaultLineWidth
+        size: CGFloat = progressRingDefaultSize,
+        lineWidth: CGFloat = progressRingDefaultLineWidth
     ) {
         self.value = min(1, max(0, value))
         self.tint = tint

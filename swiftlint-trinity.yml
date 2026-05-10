@@ -1,0 +1,75 @@
+# Trinity Design System — shared SwiftLint configuration.
+#
+# Each consuming app's .swiftlint.yml extends this file:
+#
+#   parent_config: ../trinity-design-system/swiftlint-trinity.yml
+#
+# (Use a Git URL `parent_config` once Trinity is published, or a relative path
+# during local development with `swift package edit`.)
+#
+# Rules ship as `warning` first; promote to `error` after 2 weeks of clean runs.
+
+opt_in_rules:
+  - empty_count
+  - explicit_init
+  - first_where
+  - last_where
+  - redundant_nil_coalescing
+  - sorted_imports
+  - unneeded_parentheses_in_closure_argument
+
+disabled_rules:
+  - line_length              # SwiftUI bodies legitimately exceed 120 chars
+  - file_length              # Component files can grow during ports
+  - type_body_length
+
+identifier_name:
+  min_length:
+    warning: 1
+    error: 1
+  excluded:
+    - i   # ForEach loop index
+    - x
+    - y
+    - r
+    - g
+    - b
+    - d   # zip destructuring
+
+custom_rules:
+
+  trinity_no_hardcoded_spacing:
+    name: "No hardcoded spacing"
+    regex: '\.padding\(\s*(?:\.\w+\s*,\s*)?\d+(?:\.\d+)?\s*\)'
+    message: "Use TrinitySpacing.* tokens (e.g., TrinitySpacing.lg) instead of literal padding values. See PRINCIPLES.md."
+    severity: warning
+
+  trinity_no_hardcoded_color:
+    name: "No hardcoded colour"
+    regex: 'Color\(\s*red:\s*[\d.]+,\s*green:\s*[\d.]+,\s*blue:\s*[\d.]+'
+    message: "Define colours in the Theme protocol or use TrinityStatusColors. See PRINCIPLES.md."
+    severity: warning
+
+  trinity_no_system_color_in_views:
+    name: "No raw system colours in views"
+    regex: 'Color\(\.label\)|Color\(\.systemBackground\)|Color\(\.secondarySystemBackground\)'
+    message: "Read colours through @Environment(\\.theme) instead of system colours. See PRINCIPLES.md."
+    severity: warning
+
+  trinity_no_nested_navigation_stack:
+    name: "No nested NavigationStack"
+    regex: 'NavigationStack\s*\{[^}]*NavigationStack'
+    message: "Use a single parent NavigationStack with navigationDestination(for:). See PRINCIPLES.md."
+    severity: error
+
+  trinity_typography_required:
+    name: "Use TrinityTypography for fonts"
+    regex: '\.font\(\.system\(size:\s*\d+'
+    message: "Use TrinityTypography.* (e.g., TrinityTypography.headline) instead of .font(.system(size:)). See PRINCIPLES.md."
+    severity: warning
+
+excluded:
+  - .build
+  - .swiftpm
+  - DerivedData
+  - Tests           # Tests can use literal values for clarity

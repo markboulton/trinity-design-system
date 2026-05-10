@@ -121,16 +121,5 @@ public struct DemoTRTTheme: Theme {
         )
     }
 
-    // MARK: - Helpers
-
-    private func adaptive(light: Color, dark: Color) -> Color {
-        #if canImport(UIKit)
-        Color(UIColor { traits in
-            traits.userInterfaceStyle == .dark ? UIColor(dark) : UIColor(light)
-        })
-        #else
-        dark // macOS build stub — Gallery runs on iOS only
-        #endif
-    }
 }
 #endif // canImport(UIKit)

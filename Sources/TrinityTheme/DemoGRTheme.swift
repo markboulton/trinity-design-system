@@ -97,14 +97,5 @@ public struct DemoGRTheme: Theme {
         )
     }
 
-    private func adaptive(light: Color, dark: Color) -> Color {
-        #if canImport(UIKit)
-        Color(UIColor { traits in
-            traits.userInterfaceStyle == .dark ? UIColor(dark) : UIColor(light)
-        })
-        #else
-        dark
-        #endif
-    }
 }
 #endif // canImport(UIKit)

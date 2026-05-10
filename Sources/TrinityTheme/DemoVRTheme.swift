@@ -69,9 +69,8 @@ public struct DemoVRTheme: Theme {
         case .ride:        return Color(red: 0.976, green: 0.451, blue: 0.086) // orange
         case .recovery:    return Color(red: 0.133, green: 0.773, blue: 0.369) // emerald
         case .strain:      return Color(red: 0.957, green: 0.247, blue: 0.369) // rose
-        case .readiness:   return accent
         case .heart:       return Color(red: 0.957, green: 0.247, blue: 0.369)
-        case .sleep:       return Color(red: 0.051, green: 0.580, blue: 0.533)
+        case .readiness, .sleep: return accent
         case .activity, .wellness: return Color(red: 0.133, green: 0.773, blue: 0.369)
         case .mindfulness, .appointments: return Color(red: 0.133, green: 0.827, blue: 0.933)
         case .doses, .sideEffects, .bloodWork, .session, .volume, .fatigue:
@@ -98,14 +97,5 @@ public struct DemoVRTheme: Theme {
         )
     }
 
-    private func adaptive(light: Color, dark: Color) -> Color {
-        #if canImport(UIKit)
-        Color(UIColor { traits in
-            traits.userInterfaceStyle == .dark ? UIColor(dark) : UIColor(light)
-        })
-        #else
-        dark
-        #endif
-    }
 }
 #endif // canImport(UIKit)

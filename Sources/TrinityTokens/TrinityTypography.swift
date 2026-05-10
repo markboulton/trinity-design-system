@@ -51,6 +51,6 @@ public enum TrinityTypography {
 
     // MARK: - Navigation
 
-    public static let navigationLargeTitle = Font.custom(fontFamily, size: 28, relativeTo: .largeTitle).weight(.regular)
+    public static let navigationLargeTitle = Font.custom(fontFamily, size: 28, relativeTo: .title).weight(.regular)
     public static let navigationTitle = Font.custom(fontFamily, size: 17, relativeTo: .headline).weight(.regular)
 }

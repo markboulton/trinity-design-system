@@ -32,7 +32,7 @@ public struct TrinityEmptyState: View {
         VStack(spacing: TrinitySpacing.lg) {
             Spacer()
             Image(systemName: icon)
-                .font(.system(size: 44))
+                .font(.system(size: 44)) // no TrinityTypography icon-display token at this size
                 .foregroundStyle(theme.accent)
             VStack(spacing: TrinitySpacing.xs) {
                 Text(title)

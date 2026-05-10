@@ -30,7 +30,7 @@ public struct TrinityErrorState: View {
             Spacer()
             Image(systemName: TrinityIcons.exclamationTriangle)
                 .frame(width: TrinitySpacing.touch, height: TrinitySpacing.touch)
-                .font(.system(size: 44))
+                .font(.system(size: 44)) // no TrinityTypography icon-display token at this size
                 .foregroundStyle(TrinityStatusColors.warning)
             VStack(spacing: TrinitySpacing.xs) {
                 Text(title)

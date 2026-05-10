@@ -2,6 +2,8 @@ import SwiftUI
 import TrinityTokens
 import TrinityTheme
 
+private let scaleSelectorCircleSize: CGFloat = 36
+
 /// Horizontal 1–5 scale picker with numbered circles.
 ///
 /// Each level is tappable and highlights the selected value with a colour fill.
@@ -72,10 +74,10 @@ public struct TrinityScaleSelector: View {
                                         Circle()
                                             .strokeBorder(
                                                 value == level ? colorForLevel(level) : theme.borderSubtle,
-                                                lineWidth: 1.5
+                                                lineWidth: TrinityBorderWidth.medium
                                             )
                                     )
-                                    .frame(width: 36, height: 36)
+                                    .frame(width: scaleSelectorCircleSize, height: scaleSelectorCircleSize)
 
                                 Text("\(level)")
                                     .font(TrinityTypography.numericSmall)

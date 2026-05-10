@@ -2,6 +2,11 @@ import SwiftUI
 import TrinityTokens
 import TrinityTheme
 
+// File-private constants used as default parameter values in TrinityProgressRing.init.
+// Public-facing aliases are exposed as static properties on the struct below.
+private let _progressRingDefaultSize: CGFloat = 80
+private let _progressRingDefaultLineWidth: CGFloat = 8
+
 /// Circular progress arc with optional centre and caption labels.
 ///
 /// Value is clamped to `0...1` — pass fractional progress directly.
@@ -13,6 +18,11 @@ import TrinityTheme
 /// TrinityProgressRing(value: 0.5, tint: TrinityStatusColors.success, size: 60, lineWidth: 6)
 /// ```
 public struct TrinityProgressRing: View {
+
+    /// Default ring diameter (80pt).
+    public static let defaultSize: CGFloat = _progressRingDefaultSize
+    /// Default stroke width (8pt).
+    public static let defaultLineWidth: CGFloat = _progressRingDefaultLineWidth
 
     @Environment(\.theme) private var theme
 
@@ -28,8 +38,8 @@ public struct TrinityProgressRing: View {
         tint: Color? = nil,
         centreLabel: String? = nil,
         captionLabel: String? = nil,
-        size: CGFloat = 80,
-        lineWidth: CGFloat = 8
+        size: CGFloat = _progressRingDefaultSize,
+        lineWidth: CGFloat = _progressRingDefaultLineWidth
     ) {
         self.value = min(1, max(0, value))
         self.tint = tint
@@ -52,7 +62,7 @@ public struct TrinityProgressRing: View {
                 .rotationEffect(.degrees(-90))
 
             // Centre labels
-            VStack(spacing: 2) {
+            VStack(spacing: TrinitySpacing.hairline) {
                 if let centreLabel {
                     Text(centreLabel)
                         .font(TrinityTypography.numericSmall)

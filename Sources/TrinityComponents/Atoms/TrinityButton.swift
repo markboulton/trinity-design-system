@@ -88,13 +88,13 @@ public struct TrinityButtonLabel: View {
                     .tint(theme.accent)
             } else if let icon {
                 Image(systemName: icon)
-                    .font(.custom(TrinityTypography.fontFamily, size: 11, relativeTo: .caption2).weight(.semibold))
+                    .font(TrinityTypography.captionSmallEmphasis)
             }
             Text(label).font(TrinityTypography.subheadlineEmphasis)
         }
         .foregroundStyle(theme.accent)
-        .padding(.horizontal, 10)
-        .padding(.vertical, 6)
+        .padding(.horizontal, 10) // intentional intermediate — no 10pt token yet
+        .padding(.vertical, TrinitySpacing.xs)
         .background(
             RoundedRectangle(cornerRadius: TrinitySpacing.buttonCornerRadius)
                 .fill(theme.accentSubtle)

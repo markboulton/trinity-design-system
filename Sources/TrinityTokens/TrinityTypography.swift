@@ -36,6 +36,7 @@ public enum TrinityTypography {
     public static let caption = Font.custom(fontFamily, size: 13, relativeTo: .caption).weight(.regular)
     public static let captionEmphasis = Font.custom(fontFamily, size: 13, relativeTo: .caption).weight(.semibold)
     public static let captionSmall = Font.custom(fontFamily, size: 11, relativeTo: .caption2).weight(.regular)
+    public static let captionSmallEmphasis = Font.custom(fontFamily, size: 11, relativeTo: .caption2).weight(.semibold)
 
     // MARK: - Numeric (tabular figures for metrics)
 

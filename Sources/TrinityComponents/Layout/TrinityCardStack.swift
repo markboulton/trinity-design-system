@@ -1,7 +1,7 @@
 import SwiftUI
 import TrinityTokens
 
-/// Standard vertical card stack with `cardSpacing` (12pt) between children.
+/// Standard vertical card stack with `cardSpacing` between children.
 ///
 /// Use as the direct child of `trinityScreen()` when the screen is a list of cards.
 /// Cards inside the stack must NOT add their own external padding — the stack
@@ -28,7 +28,7 @@ public struct TrinityCardStack<Content: View>: View {
                 .frame(maxWidth: .infinity)
                 .padding(TrinitySpacing.cardPadding)
                 .background(Color.gray.opacity(0.2))
-                .cornerRadius(TrinitySpacing.cardCornerRadius)
+                .clipShape(RoundedRectangle(cornerRadius: TrinitySpacing.cardCornerRadius, style: .continuous))
         }
     }
     .padding(TrinitySpacing.sectionPadding)

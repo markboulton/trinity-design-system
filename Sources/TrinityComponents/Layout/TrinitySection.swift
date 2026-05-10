@@ -24,6 +24,7 @@ public struct TrinitySection<Content: View>: View {
                 Text(title)
                     .font(TrinityTypography.titleMedium)
                     .foregroundStyle(theme.labelPrimary)
+                    .accessibilityAddTraits(.isHeader)
             }
             VStack(spacing: TrinitySpacing.cardSpacing) {
                 content()

@@ -52,7 +52,7 @@ public extension View {
                 .frame(maxWidth: .infinity)
                 .padding(TrinitySpacing.cardPadding)
                 .background(Color.gray.opacity(0.2))
-                .cornerRadius(TrinitySpacing.cardCornerRadius)
+                .clipShape(RoundedRectangle(cornerRadius: TrinitySpacing.cardCornerRadius, style: .continuous))
         }
     }
     .trinityScreen()

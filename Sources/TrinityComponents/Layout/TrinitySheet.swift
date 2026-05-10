@@ -13,16 +13,12 @@ public struct TrinitySheetModifier<SheetContent: View>: ViewModifier {
 
     public func body(content: Content) -> some View {
         content.sheet(isPresented: $isPresented) {
-            if #available(iOS 16.4, macOS 13.3, *) {
-                sheetContent()
-                    .presentationDetents([.medium, .large])
-                    .presentationCornerRadius(TrinityRadii.sheet)
-                    .presentationDragIndicator(.visible)
-            } else {
-                sheetContent()
-                    .presentationDetents([.medium, .large])
-                    .presentationDragIndicator(.visible)
-            }
+            sheetContent()
+                .presentationDetents([.medium, .large])
+                .presentationDragIndicator(.visible)
+#if os(iOS)
+                .presentationCornerRadius(TrinityRadii.sheet)
+#endif
         }
     }
 }

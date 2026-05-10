@@ -6,6 +6,12 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		FADF57DF2FB11CCF0000A159 /* TrinityComponents in Frameworks */ = {isa = PBXBuildFile; productRef = FADF57DE2FB11CCF0000A159 /* TrinityComponents */; };
+		FADF57E12FB11CCF0000A159 /* TrinityTheme in Frameworks */ = {isa = PBXBuildFile; productRef = FADF57E02FB11CCF0000A159 /* TrinityTheme */; };
+		FADF57E32FB11CCF0000A159 /* TrinityTokens in Frameworks */ = {isa = PBXBuildFile; productRef = FADF57E22FB11CCF0000A159 /* TrinityTokens */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		FADF57C12FB10CF50000A159 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -52,6 +58,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FADF57E32FB11CCF0000A159 /* TrinityTokens in Frameworks */,
+				FADF57E12FB11CCF0000A159 /* TrinityTheme in Frameworks */,
+				FADF57DF2FB11CCF0000A159 /* TrinityComponents in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,6 +121,9 @@
 			);
 			name = Gallery;
 			packageProductDependencies = (
+				FADF57DE2FB11CCF0000A159 /* TrinityComponents */,
+				FADF57E02FB11CCF0000A159 /* TrinityTheme */,
+				FADF57E22FB11CCF0000A159 /* TrinityTokens */,
 			);
 			productName = Gallery;
 			productReference = FADF57B32FB10CF30000A159 /* Gallery.app */;
@@ -195,6 +207,9 @@
 			);
 			mainGroup = FADF57AA2FB10CF30000A159;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				FADF57DD2FB11CCF0000A159 /* XCLocalSwiftPackageReference "../../trinity-design-system" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = FADF57B42FB10CF30000A159 /* Products */;
 			projectDirPath = "";
@@ -578,6 +593,28 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		FADF57DD2FB11CCF0000A159 /* XCLocalSwiftPackageReference "../../trinity-design-system" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = "../../trinity-design-system";
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		FADF57DE2FB11CCF0000A159 /* TrinityComponents */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = TrinityComponents;
+		};
+		FADF57E02FB11CCF0000A159 /* TrinityTheme */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = TrinityTheme;
+		};
+		FADF57E22FB11CCF0000A159 /* TrinityTokens */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = TrinityTokens;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = FADF57AB2FB10CF30000A159 /* Project object */;
 }

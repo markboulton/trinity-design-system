@@ -1,24 +1,38 @@
-//
-//  ContentView.swift
-//  Gallery
-//
-//  Created by Mark Boulton on 10/05/2026.
-//
-
 import SwiftUI
+import TrinityComponents
+import TrinityTheme
 
 struct ContentView: View {
-    var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-        }
-        .padding()
-    }
-}
 
-#Preview {
-    ContentView()
+    @Binding var selectedTheme: GalleryApp.ThemeOption
+
+    var body: some View {
+        NavigationStack {
+            List {
+                Section("Tokens") {
+                    NavigationLink("Tokens", destination: TokensPage())
+                }
+                Section("Components") {
+                    NavigationLink("Atoms", destination: AtomsPage())
+                    NavigationLink("Molecules", destination: MoleculesPage())
+                    NavigationLink("Organisms", destination: OrganismsPage())
+                }
+                Section("Quality") {
+                    NavigationLink("Theme Comparison", destination: ThemeComparisonPage())
+                    NavigationLink("Recipes", destination: RecipesPage())
+                }
+            }
+            .navigationTitle("Trinity Gallery")
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Picker("Theme", selection: $selectedTheme) {
+                        ForEach(GalleryApp.ThemeOption.allCases) { option in
+                            Text(option.rawValue).tag(option)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                }
+            }
+        }
+    }
 }

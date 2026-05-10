@@ -43,7 +43,7 @@ public struct TrinityTextField: View {
             TextField(placeholder, text: $text)
                 .font(TrinityTypography.body)
                 .padding(.horizontal, TrinitySpacing.md)
-                .padding(.vertical, TrinitySpacing.sm + 2)
+                .padding(.vertical, TrinitySpacing.sm)
                 .background(
                     RoundedRectangle(cornerRadius: TrinityRadii.button)
                         .fill(theme.backgroundTertiary)

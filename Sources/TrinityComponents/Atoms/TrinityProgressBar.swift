@@ -32,18 +32,18 @@ public struct TrinityProgressBar: View {
         GeometryReader { geometry in
             ZStack(alignment: .leading) {
                 // Track
-                RoundedRectangle(cornerRadius: 2)
+                RoundedRectangle(cornerRadius: TrinitySpacing.hairline)
                     .fill(theme.borderSubtle)
-                    .frame(height: 4)
+                    .frame(height: TrinitySpacing.xxs)
 
                 // Fill
-                RoundedRectangle(cornerRadius: 2)
+                RoundedRectangle(cornerRadius: TrinitySpacing.hairline)
                     .fill(theme.accent)
-                    .frame(width: geometry.size.width * progress, height: 4)
+                    .frame(width: geometry.size.width * progress, height: TrinitySpacing.xxs)
                     .animation(.easeInOut(duration: 0.3), value: currentStep)
             }
         }
-        .frame(height: 4)
+        .frame(height: TrinitySpacing.xxs)
     }
 }
 

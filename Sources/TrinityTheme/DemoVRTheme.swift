@@ -57,8 +57,8 @@ public struct DemoVRTheme: Theme {
         adaptive(light: Color(.separator), dark: Color(red: 0.165, green: 0.165, blue: 0.165))
     }
 
-    // Brand — VR teal accent
-    public var accent: Color { Color(red: 0.051, green: 0.580, blue: 0.533) } // teal #0D9488
+    // Brand — VR blue accent (matches VRColorScale.accent)
+    public var accent: Color { Color(red: 0.145, green: 0.388, blue: 0.922) } // blue #2563EB
     public var accentSubtle: Color { accent.opacity(0.12) }
     public var insightAccent: Color { Color(red: 0.545, green: 0.361, blue: 0.969) }
     public var insightAccentSubtle: Color { insightAccent.opacity(0.15) }
@@ -83,7 +83,7 @@ public struct DemoVRTheme: Theme {
 
     // Charts
     public var chartPrimary: Color { accent }
-    public var chartSecondary: Color { categoryColor(.ride) }
+    public var chartSecondary: Color { Color(red: 0.976, green: 0.451, blue: 0.086) } // orange for secondary chart series
     public var chartGrid: Color {
         adaptive(
             light: Color(.separator).opacity(0.5),

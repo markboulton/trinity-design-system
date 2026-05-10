@@ -66,7 +66,7 @@ public struct TrinityText: View {
         }
 
         var tracking: CGFloat {
-            self == .sectionEyebrow ? 1.4 : 0
+            self == .sectionEyebrow ? TrinityTypography.sectionEyebrowTracking : 0
         }
     }
 

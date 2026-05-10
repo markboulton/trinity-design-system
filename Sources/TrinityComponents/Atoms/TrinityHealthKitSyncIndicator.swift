@@ -67,7 +67,7 @@ public struct TrinityHealthKitSyncIndicator: View {
         HStack(spacing: TrinitySpacing.xs) {
             if isLoadingVisible {
                 Image(systemName: "arrow.triangle.2.circlepath")
-                    .font(.system(size: 11, weight: .semibold))
+                    .font(TrinityTypography.captionSmallEmphasis)
                     .foregroundStyle(theme.labelSecondary)
                     .rotationEffect(.degrees(rotationAngle))
                 Text(loadingText)
@@ -76,7 +76,7 @@ public struct TrinityHealthKitSyncIndicator: View {
                     .animation(.easeInOut(duration: 0.2), value: loadingText)
             } else {
                 Image(systemName: "checkmark.circle.fill")
-                    .font(.system(size: 11, weight: .semibold))
+                    .font(TrinityTypography.captionSmallEmphasis)
                     .foregroundStyle(TrinityStatusColors.success)
                 if let date = lastSyncDate {
                     Text("Synced \u{00B7} \(relativeTimeText(date))")
@@ -92,7 +92,7 @@ public struct TrinityHealthKitSyncIndicator: View {
         .onAppear {
             startLoadingDisplay()
         }
-        .onChange(of: state) { newState in
+        .onChange(of: state) { _, newState in
             switch newState {
             case .syncing(let msg):
                 lastLoadingText = msg.isEmpty ? "Syncing" : msg
@@ -106,7 +106,7 @@ public struct TrinityHealthKitSyncIndicator: View {
                 break
             }
         }
-        .onChange(of: isAnalysing) { analysing in
+        .onChange(of: isAnalysing) { _, analysing in
             if analysing {
                 lastLoadingText = "Analysing"
             } else {

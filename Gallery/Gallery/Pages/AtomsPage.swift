@@ -21,6 +21,7 @@ struct AtomsPage: View {
                 progressSection
                 toggleChipSection
                 textFieldSection
+                pulseLoaderSection
             }
             .padding(TrinitySpacing.sectionPadding)
         }
@@ -93,6 +94,18 @@ struct AtomsPage: View {
             Text("TrinityTextField").font(TrinityTypography.titleMedium)
             TrinityTextField(label: "Dosage (mg)", text: $fieldText, placeholder: "e.g. 150")
             TrinityTextField(label: "Name", text: .constant(""), placeholder: "Enter name…", errorMessage: "Name is required")
+        }
+    }
+
+    private var pulseLoaderSection: some View {
+        VStack(alignment: .leading, spacing: TrinitySpacing.md) {
+            Text("TrinityPulseLoader").font(TrinityTypography.titleMedium)
+            HStack(spacing: TrinitySpacing.lg) {
+                TrinityPulseLoader(size: 60)
+                TrinityPulseLoader(size: 80)
+                TrinityPulseLoader(size: 100)
+            }
+            .padding(TrinitySpacing.cardPadding)
         }
     }
 }

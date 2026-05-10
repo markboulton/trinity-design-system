@@ -2,6 +2,8 @@ import SwiftUI
 import TrinityTokens
 import TrinityTheme
 
+private let dateNavButtonSize: CGFloat = 30
+
 /// Centred date/period title flanked by previous/next chevron buttons.
 ///
 /// Use above charts and detail surfaces to step through time periods.
@@ -66,10 +68,10 @@ public struct TrinityDateNavigator: View {
                         ? theme.labelPrimary
                         : theme.labelTertiary
                 )
-                .frame(width: 30, height: 30)
+                .frame(width: dateNavButtonSize, height: dateNavButtonSize)
                 .background(
                     Circle()
-                        .stroke(theme.labelSecondary.opacity(0.25), lineWidth: 0.5)
+                        .stroke(theme.labelSecondary.opacity(TrinityOpacity.border), lineWidth: TrinityBorderWidth.hairline)
                 )
         }
         .disabled(!enabled)

@@ -54,4 +54,9 @@ public enum TrinityTypography {
 
     public static let navigationLargeTitle = Font.custom(fontFamily, size: 28, relativeTo: .title).weight(.regular)
     public static let navigationTitle = Font.custom(fontFamily, size: 17, relativeTo: .headline).weight(.regular)
+
+    // MARK: - Letter Spacing
+
+    /// Tracking applied to ALL-CAPS section eyebrow labels.
+    public static let sectionEyebrowTracking: CGFloat = 1.4
 }

@@ -44,4 +44,24 @@ struct ThemeConformanceTests {
             _ = theme.categorySubtle(token)
         }
     }
+
+#if canImport(UIKit)
+    @Test("Demo themes resolve all TrinityCategoryToken cases without crashing")
+    func demoThemesResolveAllCategoryTokens() {
+        let themes: [(String, any Theme)] = [
+            ("DemoTRTTheme", DemoTRTTheme()),
+            ("DemoVRTheme",  DemoVRTheme()),
+            ("DemoGRTheme",  DemoGRTheme())
+        ]
+
+        for (name, theme) in themes {
+            for token in TrinityCategoryToken.allCases {
+                _ = theme.categoryColor(token)
+                _ = theme.categorySubtle(token)
+            }
+            // Sentinel red (from MissingThemeSentinel) means the theme env is unwired.
+            #expect(theme.accent != .red, "\(name) accent must not be the missing-theme sentinel red")
+        }
+    }
+#endif
 }

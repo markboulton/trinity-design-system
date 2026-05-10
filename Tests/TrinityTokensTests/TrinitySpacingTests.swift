@@ -1,28 +1,31 @@
-import XCTest
+import Testing
 @testable import TrinityTokens
 
-final class TrinitySpacingTests: XCTestCase {
+@Suite("TrinitySpacing")
+struct TrinitySpacingTests {
 
-    func test_baseUnits_haveExpectedValues() {
-        XCTAssertEqual(TrinitySpacing.hairline, 2)
-        XCTAssertEqual(TrinitySpacing.xxs, 6)
-        XCTAssertEqual(TrinitySpacing.xs, 4)
-        XCTAssertEqual(TrinitySpacing.sm, 8)
-        XCTAssertEqual(TrinitySpacing.md, 12)
-        XCTAssertEqual(TrinitySpacing.lg, 16)
-        XCTAssertEqual(TrinitySpacing.xl, 20)
-        XCTAssertEqual(TrinitySpacing.xxl, 24)
-        XCTAssertEqual(TrinitySpacing.huge, 32)
-        XCTAssertEqual(TrinitySpacing.touch, 44)
+    @Test("Base units have expected values")
+    func baseUnits() {
+        #expect(TrinitySpacing.hairline == 2)
+        #expect(TrinitySpacing.xxs == 4)
+        #expect(TrinitySpacing.xs == 6)
+        #expect(TrinitySpacing.sm == 8)
+        #expect(TrinitySpacing.md == 12)
+        #expect(TrinitySpacing.lg == 16)
+        #expect(TrinitySpacing.xl == 20)
+        #expect(TrinitySpacing.xxl == 24)
+        #expect(TrinitySpacing.huge == 32)
+        #expect(TrinitySpacing.touch == 44)
     }
 
-    func test_semanticAliases_resolveToBaseUnits() {
-        XCTAssertEqual(TrinitySpacing.cardPadding, TrinitySpacing.lg)        // 16
-        XCTAssertEqual(TrinitySpacing.cardSpacing, TrinitySpacing.md)        // 12
-        XCTAssertEqual(TrinitySpacing.sectionSpacing, TrinitySpacing.xl)     // 20
-        XCTAssertEqual(TrinitySpacing.sectionPadding, TrinitySpacing.xl)     // 20
-        XCTAssertEqual(TrinitySpacing.cardContentSpacing, TrinitySpacing.md) // 12
-        XCTAssertEqual(TrinitySpacing.cardCornerRadius, 10)
-        XCTAssertEqual(TrinitySpacing.buttonCornerRadius, 8)
+    @Test("Semantic aliases resolve to base units")
+    func semanticAliases() {
+        #expect(TrinitySpacing.cardPadding == TrinitySpacing.lg)
+        #expect(TrinitySpacing.cardSpacing == TrinitySpacing.md)
+        #expect(TrinitySpacing.sectionSpacing == TrinitySpacing.xl)
+        #expect(TrinitySpacing.sectionPadding == TrinitySpacing.xl)
+        #expect(TrinitySpacing.cardContentSpacing == TrinitySpacing.md)
+        #expect(TrinitySpacing.cardCornerRadius == 10)
+        #expect(TrinitySpacing.buttonCornerRadius == 8)
     }
 }

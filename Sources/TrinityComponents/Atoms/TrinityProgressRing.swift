@@ -2,10 +2,11 @@ import SwiftUI
 import TrinityTokens
 import TrinityTheme
 
-// File-private constants used as default parameter values in TrinityProgressRing.init.
+// Internal constants used as default parameter values in TrinityProgressRing.init.
+// @usableFromInline is required so public inits can reference them.
 // Public-facing aliases are exposed as static properties on the struct below.
-private let _progressRingDefaultSize: CGFloat = 80
-private let _progressRingDefaultLineWidth: CGFloat = 8
+@usableFromInline let _progressRingDefaultSize: CGFloat = 80
+@usableFromInline let _progressRingDefaultLineWidth: CGFloat = 8
 
 /// Circular progress arc with optional centre and caption labels.
 ///

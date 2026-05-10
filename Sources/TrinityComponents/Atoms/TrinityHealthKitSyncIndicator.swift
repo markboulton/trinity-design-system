@@ -17,6 +17,7 @@ import TrinityTheme
 /// TrinityHealthKitSyncIndicator(state: .syncing("Syncing HealthKit"), isAnalysing: false)
 /// TrinityHealthKitSyncIndicator(state: .synced(Date()), isAnalysing: false)
 /// ```
+@available(iOS 17.0, macOS 14.0, *)
 public struct TrinityHealthKitSyncIndicator: View {
 
     @Environment(\.theme) private var theme

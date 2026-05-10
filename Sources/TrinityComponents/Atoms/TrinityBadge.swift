@@ -18,9 +18,9 @@ public struct TrinityBadge: View {
     /// The brand gradient used for badge borders and text fills.
     public static let brandGradient = LinearGradient(
         colors: [
-            Color(red: 0.55, green: 0.36, blue: 0.75),  // muted violet
-            Color(red: 0.72, green: 0.38, blue: 0.55),  // muted rose
-            Color(red: 0.82, green: 0.55, blue: 0.32),  // muted amber
+            TrinityBrandColors.gradientStart,
+            TrinityBrandColors.gradientMid,
+            TrinityBrandColors.gradientEnd,
         ],
         startPoint: .leading,
         endPoint: .trailing
@@ -70,7 +70,7 @@ public struct TrinityBadge: View {
             .padding(.vertical, verticalPadding)
             .background(
                 Capsule()
-                    .strokeBorder(Self.brandGradient, lineWidth: 1.5)
+                    .strokeBorder(Self.brandGradient, lineWidth: TrinityBorderWidth.medium)
             )
     }
 }

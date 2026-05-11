@@ -26,28 +26,27 @@ public struct TrinityPulseLoader: View {
                 .frame(width: size, height: size)
                 .scaleEffect(innerScale)
         }
-        .onAppear {
-            animateOuter()
-            animateInner()
-        }
-    }
-
-    private func animateOuter() {
-        withAnimation(.linear(duration: 0.6)) { outerScale = 1.0 }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
-            withAnimation(.linear(duration: 0.2)) { outerScale = 1.2 }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+        .task {
+            while true {
+                try? await Task.sleep(for: .seconds(0.6))
+                guard !Task.isCancelled else { return }
+                withAnimation(.linear(duration: 0.2)) { outerScale = 1.2 }
+                try? await Task.sleep(for: .seconds(0.2))
+                guard !Task.isCancelled else { return }
                 withAnimation(.linear(duration: 0.2)) { outerScale = 1.0 }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { animateOuter() }
+                try? await Task.sleep(for: .seconds(0.2))
+                guard !Task.isCancelled else { return }
             }
         }
-    }
-
-    private func animateInner() {
-        withAnimation(.linear(duration: 0.6)) { innerScale = 0.0 }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
-            withAnimation(.linear(duration: 0.4)) { innerScale = 1.0 }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) { animateInner() }
+        .task {
+            while true {
+                withAnimation(.linear(duration: 0.6)) { innerScale = 0.0 }
+                try? await Task.sleep(for: .seconds(0.6))
+                guard !Task.isCancelled else { return }
+                withAnimation(.linear(duration: 0.4)) { innerScale = 1.0 }
+                try? await Task.sleep(for: .seconds(0.4))
+                guard !Task.isCancelled else { return }
+            }
         }
     }
 }

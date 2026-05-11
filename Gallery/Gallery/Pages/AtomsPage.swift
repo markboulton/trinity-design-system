@@ -5,12 +5,16 @@ import TrinityTheme
 
 struct AtomsPage: View {
 
+    @Environment(\.theme) var theme
+
     @State private var filterSelection: String = "Week"
     @State private var chipOn: Bool = false
     @State private var chipSeverity: Int = 1
     @State private var fieldText: String = ""
 
     private let filterOptions = ["Day", "Week", "Month"]
+    private let sampleLine: [Double] = [240, 242, 245, 243, 248, 246, 250, 248]
+    private let sampleBars: [Double] = [3200, 5100, 4800, 6200, 7100, 3900, 5500, 6800]
 
     var body: some View {
         ScrollView {
@@ -22,6 +26,8 @@ struct AtomsPage: View {
                 toggleChipSection
                 textFieldSection
                 pulseLoaderSection
+                lineSparklineSection
+                barSparklineSection
             }
             .padding(TrinitySpacing.sectionPadding)
         }
@@ -106,6 +112,22 @@ struct AtomsPage: View {
                 TrinityPulseLoader(size: 100)
             }
             .padding(TrinitySpacing.cardPadding)
+        }
+    }
+
+    private var lineSparklineSection: some View {
+        VStack(alignment: .leading, spacing: TrinitySpacing.md) {
+            Text("TrinityLineSparkline").font(TrinityTypography.titleMedium)
+            TrinityLineSparkline(values: sampleLine, tint: theme.accent)
+                .frame(width: 200, height: 48)
+        }
+    }
+
+    private var barSparklineSection: some View {
+        VStack(alignment: .leading, spacing: TrinitySpacing.md) {
+            Text("TrinityBarSparkline").font(TrinityTypography.titleMedium)
+            TrinityBarSparkline(values: sampleBars, tint: theme.accent)
+                .frame(width: 200, height: 48)
         }
     }
 }

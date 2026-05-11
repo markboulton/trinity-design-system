@@ -28,6 +28,7 @@ struct AtomsPage: View {
                 pulseLoaderSection
                 lineSparklineSection
                 barSparklineSection
+                skeletonSection
             }
             .padding(TrinitySpacing.sectionPadding)
         }
@@ -128,6 +129,15 @@ struct AtomsPage: View {
             Text("TrinityBarSparkline").font(TrinityTypography.titleMedium)
             TrinityBarSparkline(values: sampleBars, tint: theme.accent)
                 .frame(width: 200, height: 48)
+        }
+    }
+
+    private var skeletonSection: some View {
+        VStack(alignment: .leading, spacing: TrinitySpacing.md) {
+            Text("TrinitySkeletonView").font(TrinityTypography.titleMedium)
+            TrinitySkeletonView(height: 60)
+            TrinitySkeletonView(height: 100)
+            TrinitySkeletonView(height: 40, cornerRadius: 4)
         }
     }
 }

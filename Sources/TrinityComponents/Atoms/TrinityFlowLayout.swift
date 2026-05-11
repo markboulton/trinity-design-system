@@ -95,6 +95,5 @@ public struct TrinityFlowLayout: Layout {
         }
     }
     .padding(TrinitySpacing.sectionPadding)
-    .theme(DemoTRTTheme())
 }
 #endif

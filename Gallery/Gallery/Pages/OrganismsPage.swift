@@ -25,6 +25,7 @@ struct OrganismsPage: View {
                 compoundMetricSection
                 pendingMetricSection
                 trendChartSection
+                rangeChartSection
                 detailPageNote
             }
             .padding(TrinitySpacing.sectionPadding)
@@ -76,6 +77,27 @@ struct OrganismsPage: View {
                     yAxisLabel: "bpm",
                     yRange: 45...85,
                     showAreaFill: true
+                )
+                .frame(height: 160)
+            }
+        }
+    }
+
+    private var rangeChartSection: some View {
+        VStack(alignment: .leading, spacing: TrinitySpacing.md) {
+            Text("TrinityRangeChart").font(TrinityTypography.titleMedium)
+            TrinityChartCard(title: "Resting HR — 7 day range") {
+                TrinityRangeChart(
+                    buckets: (0..<7).map { i -> TrinityRangeChart.Bucket in
+                        let date = Calendar.current.date(
+                            byAdding: .day, value: -(6 - i), to: Date()
+                        ) ?? Date()
+                        let mid = 55.0 + sin(Double(i) / 2.0) * 4
+                        return TrinityRangeChart.Bucket(date: date, low: mid - 3, high: mid + 4)
+                    },
+                    tint: TrinityStatusColors.error,
+                    baseline: 55,
+                    baselineLabel: "Baseline"
                 )
                 .frame(height: 160)
             }

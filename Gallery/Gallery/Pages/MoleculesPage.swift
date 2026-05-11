@@ -17,6 +17,7 @@ struct MoleculesPage: View {
                 chartCardSection
                 wellnessDotSection
                 metricInsightSection
+                infoBannerSection
             }
             .padding(TrinitySpacing.sectionPadding)
         }
@@ -109,6 +110,21 @@ struct MoleculesPage: View {
                 }
                 .padding(TrinitySpacing.cardPadding)
             }
+        }
+    }
+
+    private var infoBannerSection: some View {
+        VStack(alignment: .leading, spacing: TrinitySpacing.md) {
+            Text("TrinityInfoBanner").font(TrinityTypography.titleMedium)
+            TrinityInfoBanner(severity: .info, title: "Tip",
+                message: "Connect more data sources for better insights.")
+            TrinityInfoBanner(severity: .warning, title: "Missing Sleep Data",
+                message: "Recovery score may be less accurate.",
+                actionTitle: "Grant Access", action: {}, dismissAction: {})
+            TrinityInfoBanner(severity: .error, title: "Connection Failed",
+                message: "Could not reach Intervals.icu")
+            TrinityInfoBanner(severity: .success, title: "Connected",
+                message: "Strava data is now syncing.")
         }
     }
 

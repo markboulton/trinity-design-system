@@ -54,6 +54,16 @@ Established conventions from Tasks 14-15:
 
 Layout layer (TrinityScreen / TrinityCardStack / TrinitySection / TrinityPush / TrinitySheet) reviewed 2026-05-10.
 
+Task 33 (TrinityLineSparkline + TrinityBarSparkline + AtomsPage) reviewed 2026-05-11 — APPROVED with one warning and one suggestion. All spec requirements met. Warning: Charts framework is imported with no package dependency declared in Package.swift — Charts is part of the Xcode SDK on iOS 17+ but is NOT available on macOS 13 without an explicit dependency, which means `swift build` on the host machine only succeeds because the current build happens to not resolve macOS-specific Charts usage; if macOS support is exercised this will fail. Suggestion: TrinityBarSparkline has no empty-values guard (contrast TrinityLineSparkline's `< 2` guard) — an empty array passes through GeometryReader fine (`barCount=0`, `totalSpacing=0`, `barWidth=max(…/0, 1)` hits the max(1) floor), so this is not a crash risk, but parity with the line sparkline would be cleaner. Preview uses hardcoded Color(red:green:blue:) literals in TrinityLineSparkline rather than theme.accent — this is a preview-only exception, same as established pattern for Molecules/Organisms.
+
+TrinityPulseLoader (Atom) reviewed 2026-05-11 — NOT APPROVED. Two critical issues and two warnings.
+Critical: (1) DispatchQueue.main.asyncAfter recursion has no onDisappear cancellation — the chain fires indefinitely after the view disappears, causing memory/CPU leak until the app exits. Fix: replace with a Task-based loop holding a nonisolated(unsafe) stored property or use a parent-level task group controlled via .task { }. (2) innerScale starts at 0.0 — the inner circle is invisible at rest, which contradicts a two-ring loader design (both rings should be visible). If the inner circle is intentional as a ripple-in from invisible, that is a design clarification needed from spec; if it mirrors the outer ring, initial state should be 1.0.
+Warnings: (1) `isLoading` in TrinityLoadingOverlayModifier is a plain let — fine for read-only use but should be @Binding if the caller ever needs to dismiss the overlay from within the overlay itself (currently it cannot). (2) No tests (continuing repeating pattern for TrinityComponents).
+
+Established conventions from TrinityPulseLoader review:
+- DispatchQueue.main.asyncAfter recursive animation loops have no cancellation point. SwiftUI views have no deinit, so the chain survives view disappearance. The correct pattern for looping animations in SwiftUI is either (a) `.task { }` with an async `while true` loop using `try Task.sleep` (Task is cancelled automatically by the modifier on disappear) or (b) `withAnimation(.repeatForever)` where possible. Flag any future use of bare DispatchQueue.main.asyncAfter recursion in a View as a critical leak risk.
+- When a looping animation view has no disappear cancellation, the view modifier approach (TrinityLoadingOverlayModifier) compounds the risk because multiple overlay presentations will each spawn their own uncoordinated timer chain.
+
 Established conventions from Layout review:
 - `#Preview` blocks in layout files contain placeholder `Color.gray.opacity(...)` for illustrative backgrounds — this is an approved exception (same as Molecules/Organisms pattern).
 - `#Preview` blocks in layout files also use `.cornerRadius(TrinitySpacing.cardCornerRadius)` on throwaway content — this is preview-only scaffolding, not production code, and is an approved exception.
@@ -65,3 +75,30 @@ Established conventions from Layout review:
 - `TrinityScreen` correctly omits `@Environment(\.theme)` — it only applies spacing tokens. Correct.
 - `TrinitySheetModifier.isPresented` binding should use `@Binding` not a plain stored property. Current code is correct. Future reviews: flag any modifier that needs to mutate a parent bool without using @Binding.
 - `TrinitySection` title `accessibilityAddTraits(.isHeader)` is absent — this is a missing accessibility modifier. Flag in future reviews as an Important issue.
+
+Task 33 (TrinityLineSparkline / TrinityBarSparkline) reviewed 2026-05-11 — APPROVED. Charts framework import has no Package.swift dependency (works on iOS 17+ SDK but not macOS without explicit dep). TrinityBarSparkline has no empty-values guard unlike the line sparkline.
+
+Tasks 35–36 (TrinityRangeChart + TrinitySkeletonView) reviewed 2026-05-11 — both APPROVED, no critical violations.
+
+Established conventions from Tasks 35–36:
+- `Bucket.id = UUID()` on a value-type struct generates a new UUID on every construction. If the parent view rebuilds the array, ForEach treats all items as new and re-renders the chart. For chart data structs, prefer `date` (or another stable property) as the Identifiable id, or accept `id` in the init.
+- `withAnimation(.repeatForever)` driven by @State boolean is the correct SwiftUI looping animation pattern (not a DispatchQueue leak). However: if `onAppear` fires again while `isAnimating` is already true (which happens on NavigationStack push/pop), a second animation transaction layers on top. Guard with `guard !isAnimating else { return }` inside `onAppear` to prevent this.
+- `LinearGradient(colors:startPoint:endPoint:)` with `.leading`/`.trailing` + `.rotationEffect(.degrees(90))` is a correct implementation of a vertical shimmer sweep. The rotation turns the horizontal gradient into a vertical one — both directions are equivalent for the offset-based animation.
+- `yDomain` pattern for Charts: include baseline in the candidates array alongside data min/max so the domain automatically expands to show the reference line. `[minY, maxY, baseline ?? minY]` is the idiom used here and should be the template for future chart components.
+- Annotation guards on PointMark: spec requires BOTH `annotateExtremes && count <= 14` AND `low != high` to be true before rendering. The count <= 14 guard is a density/readability threshold — flag any chart annotation that omits the count guard.
+
+Task 37 (TrinityInfoBanner) reviewed 2026-05-11 — APPROVED. All 10 spec requirements met. Two minor warnings: (1) no companion test file (continuing repeating pattern); (2) TrinitySeverity has no explicit Sendable conformance — it is implicitly Sendable in Swift 5.9 but explicit conformance is the established convention for public enums in this package (see TrinityCategoryToken). tint computation verified against token files (TrinityOpacity.tonalFill, TrinityRadii.card, TrinityStatusColors all confirmed present). All four SF Symbol names valid iOS 17+.
+
+Established conventions from TrinityInfoBanner review:
+- Public enums in TrinityComponents should declare `Sendable` explicitly, consistent with TrinityTokens conventions, even when implicit conformance holds.
+- `TrinitySeverity` is the first publicly-typed severity enum in TrinityComponents. Future components that introduce their own status/state enum should follow the same pattern: `public enum XSeverity: Sendable { ... }`.
+
+Task 38 (TrinityFlowLayout) reviewed 2026-05-11 — APPROVED. All 7 spec requirements met. Layout math is correct including single-item row handling, empty-subviews case, and inter-row spacing guard. Two warnings: (1) `placeSubviews` advances `y` by `rowHeight + spacing` after every row including the last — benign because the final `y` value is discarded, but inconsistent with `sizeThatFits` which guards `if index < rows.count - 1`; (2) redundant `.theme(DemoTRTTheme())` in #Preview — no subview reads environment, so the call has no effect and contradicts the "pure layout, no theme environment" preview intent. No companion test file (continuing repeating pattern). AtomsPage flowLayoutSection: 8 chips, TrinitySpacing.xs, wired after skeletonSection — all correct.
+
+Established conventions from TrinityFlowLayout review:
+- `placeSubviews` trailing-y mismatch vs `sizeThatFits` is a known benign pattern in Layout conformances: the final `y` advance is discarded by SwiftUI. Do not flag as a crash or misplacement bug.
+- `#Preview` in a pure Layout file should NOT call `.theme()` if no child reads `@Environment(\.theme)`. If the preview uses `DemoXTheme().someColour` directly (instantiated struct), the `.theme()` call is dead and should be omitted.
+- An item whose intrinsic width exceeds `maxWidth` is placed as a single-item row at full intrinsic width (overflows bounds). For tag-chip content this is safe; for arbitrary content, cap the proposal or clamp `size.width` to `maxWidth`.
+- `computeRows` correctly uses `subview.sizeThatFits(.unspecified)` to get the intrinsic size. This is the right proposal for chips/labels that should size to their content.
+- Gallery `flowLayoutSection` correctly uses `theme.accentSubtle` via `@Environment(\.theme)` (inherited from NavigationStack). Component `#Preview` correctly uses `DemoTRTTheme().accentSubtle` directly. Both patterns are correct for their contexts.
+- The `#if canImport(UIKit)` guard on `#Preview` is consistently applied across all molecule previews — correct pattern, flag any preview block that omits this guard.

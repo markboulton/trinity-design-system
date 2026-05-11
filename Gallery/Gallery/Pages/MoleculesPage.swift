@@ -16,6 +16,7 @@ struct MoleculesPage: View {
                 errorStateSection
                 chartCardSection
                 wellnessDotSection
+                metricInsightSection
             }
             .padding(TrinitySpacing.sectionPadding)
         }
@@ -86,6 +87,27 @@ struct MoleculesPage: View {
                 RoundedRectangle(cornerRadius: TrinityRadii.button)
                     .fill(theme.accent.opacity(TrinityOpacity.tonalFill))
                     .frame(height: 120)
+            }
+        }
+    }
+
+    private var metricInsightSection: some View {
+        VStack(alignment: .leading, spacing: TrinitySpacing.md) {
+            Text("TrinityMetricInsightSection").font(TrinityTypography.titleMedium)
+            TrinityCard {
+                VStack(alignment: .leading, spacing: TrinitySpacing.md) {
+                    TrinityMetricInsightSection(
+                        headline: "FTP up 4W in the last 30 days."
+                    )
+                    Divider()
+                    TrinityMetricInsightSection(
+                        headline: "Recovery low — pull back tomorrow.",
+                        category: "Watch",
+                        iconName: "exclamationmark.triangle.fill",
+                        accent: TrinityStatusColors.warning
+                    )
+                }
+                .padding(TrinitySpacing.cardPadding)
             }
         }
     }

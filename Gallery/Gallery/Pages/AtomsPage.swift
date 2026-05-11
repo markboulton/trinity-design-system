@@ -29,6 +29,7 @@ struct AtomsPage: View {
                 lineSparklineSection
                 barSparklineSection
                 skeletonSection
+                flowLayoutSection
             }
             .padding(TrinitySpacing.sectionPadding)
         }
@@ -138,6 +139,22 @@ struct AtomsPage: View {
             TrinitySkeletonView(height: 60)
             TrinitySkeletonView(height: 100)
             TrinitySkeletonView(height: 40, cornerRadius: 4)
+        }
+    }
+
+    private var flowLayoutSection: some View {
+        VStack(alignment: .leading, spacing: TrinitySpacing.md) {
+            Text("TrinityFlowLayout").font(TrinityTypography.titleMedium)
+            TrinityFlowLayout(spacing: TrinitySpacing.xs) {
+                ForEach(["Push", "Pull", "Legs", "Core", "Conditioning", "Full Body", "Cardio", "Mobility"], id: \.self) { tag in
+                    Text(tag)
+                        .font(TrinityTypography.captionEmphasis)
+                        .padding(.horizontal, TrinitySpacing.sm)
+                        .padding(.vertical, TrinitySpacing.xs)
+                        .background(theme.accentSubtle)
+                        .clipShape(Capsule())
+                }
+            }
         }
     }
 }

@@ -19,12 +19,37 @@ struct OrganismsPage: View {
         .reversed()
     }()
 
+    private static let sampleCTL: [TrinityDataPoint] = {
+        let cal = Calendar.current
+        let today = Date()
+        return (0..<21).map { offset in
+            TrinityDataPoint(
+                date: cal.date(byAdding: .day, value: -offset, to: today)!,
+                value: Double.random(in: 50...65)
+            )
+        }
+        .reversed()
+    }()
+
+    private static let sampleATL: [TrinityDataPoint] = {
+        let cal = Calendar.current
+        let today = Date()
+        return (0..<21).map { offset in
+            TrinityDataPoint(
+                date: cal.date(byAdding: .day, value: -offset, to: today)!,
+                value: Double.random(in: 55...75)
+            )
+        }
+        .reversed()
+    }()
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: TrinitySpacing.sectionSpacing) {
                 compoundMetricSection
                 pendingMetricSection
                 trendChartSection
+                multiSeriesChartSection
                 rangeChartSection
                 detailPageNote
             }
@@ -77,6 +102,27 @@ struct OrganismsPage: View {
                     yAxisLabel: "bpm",
                     yRange: 45...85,
                     showAreaFill: true
+                )
+                .frame(height: 160)
+            }
+        }
+    }
+
+    private var multiSeriesChartSection: some View {
+        VStack(alignment: .leading, spacing: TrinitySpacing.md) {
+            Text("TrinityMultiSeriesChart").font(TrinityTypography.titleMedium)
+            TrinityChartCard(title: "Training Load (21 days)") {
+                TrinityMultiSeriesChart(
+                    series: [
+                        .init(name: "CTL",
+                              points: Self.sampleCTL,
+                              color: Color(red: 0.145, green: 0.388, blue: 0.922)),
+                        .init(name: "ATL",
+                              points: Self.sampleATL,
+                              color: Color(red: 0.976, green: 0.451, blue: 0.086))
+                    ],
+                    baseline: 50,
+                    yAxisLabel: "TSS"
                 )
                 .frame(height: 160)
             }

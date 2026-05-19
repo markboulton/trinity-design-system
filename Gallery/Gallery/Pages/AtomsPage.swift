@@ -83,6 +83,9 @@ struct AtomsPage: View {
             }
             Text("TrinityProgressBar").font(TrinityTypography.titleMedium)
             TrinityProgressBar(currentStep: 3, totalSteps: 5)
+            Text("TrinityStepBar").font(TrinityTypography.titleMedium)
+            TrinityStepBar(totalSteps: 6, completedSteps: 3)
+            TrinityStepBar(totalSteps: 7, completedSteps: 4)
         }
     }
 

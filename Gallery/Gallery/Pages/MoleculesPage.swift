@@ -10,6 +10,7 @@ struct MoleculesPage: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: TrinitySpacing.sectionSpacing) {
+                cardHeaderSection
                 cardSection
                 metricRowSection
                 emptyStateSection
@@ -22,6 +23,26 @@ struct MoleculesPage: View {
             .padding(TrinitySpacing.sectionPadding)
         }
         .navigationTitle("Molecules")
+    }
+
+    private var cardHeaderSection: some View {
+        VStack(alignment: .leading, spacing: TrinitySpacing.md) {
+            Text("TrinityCardHeader").font(TrinityTypography.titleMedium)
+            TrinityCardHeader(title: "Recovery")
+            Divider()
+            TrinityCardHeader(
+                title: "Blood Work",
+                subtitle: "Last updated 3 days ago",
+                icon: "drop.fill",
+                iconColor: TrinityStatusColors.error
+            )
+            Divider()
+            TrinityCardHeader(
+                title: "Insights",
+                icon: "lightbulb.fill",
+                trailingAction: .init(label: "See all") {}
+            )
+        }
     }
 
     private var cardSection: some View {

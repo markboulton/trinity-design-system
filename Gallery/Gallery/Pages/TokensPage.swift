@@ -13,6 +13,7 @@ struct TokensPage: View {
                 typographySection
                 colourSection
                 statusSection
+                macroSection
             }
             .padding(TrinitySpacing.sectionPadding)
         }
@@ -88,6 +89,21 @@ struct TokensPage: View {
             colourRow("wellnessGreen", TrinityStatusColors.wellnessGreen)
             colourRow("wellnessAmber", TrinityStatusColors.wellnessAmber)
             colourRow("wellnessRed", TrinityStatusColors.wellnessRed)
+        }
+    }
+
+    private var macroSection: some View {
+        VStack(alignment: .leading, spacing: TrinitySpacing.md) {
+            Text("Macros (universal)").font(TrinityTypography.titleMedium).foregroundStyle(theme.labelPrimary)
+            colourRow("macroProtein", TrinityMacroColors.macroProtein)
+            colourRow("macroProteinLabel", TrinityMacroColors.macroProteinLabel)
+            colourRow("macroCarbs", TrinityMacroColors.macroCarbs)
+            colourRow("macroCarbsLabel", TrinityMacroColors.macroCarbsLabel)
+            colourRow("macroFat", TrinityMacroColors.macroFat)
+            colourRow("macroFatLabel", TrinityMacroColors.macroFatLabel)
+            colourRow("dataVerified", TrinityMacroColors.dataVerified)
+            colourRow("dataPartial", TrinityMacroColors.dataPartial)
+            colourRow("dataCommunity", TrinityMacroColors.dataCommunity)
         }
     }
 

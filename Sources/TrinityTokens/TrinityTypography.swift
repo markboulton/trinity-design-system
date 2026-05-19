@@ -22,31 +22,71 @@ public enum TrinityTypography {
     public static let monoMedium = "IBMPlexMono-Medium"
     public static let monoBold = "IBMPlexMono-Bold"
 
-    // MARK: - Display
+    // MARK: - Display (Inter — large editorial headings, Light weight)
 
-    public static let displayLarge = Font.custom(fontFamily, size: 34, relativeTo: .largeTitle).weight(.regular)
-    public static let displayMedium = Font.custom(fontFamily, size: 28, relativeTo: .title).weight(.regular)
+    /// 38pt Inter Light — welcome / hero-screen heading.
+    public static let displayLarge = Font.custom(fontFamily, size: 38, relativeTo: .largeTitle).weight(.light)
+    /// 28pt Inter Light — large section headings, onboarding titles.
+    public static let displayMedium = Font.custom(fontFamily, size: 28, relativeTo: .largeTitle).weight(.light)
 
-    // MARK: - Title
+    // MARK: - Title (Inter)
 
-    public static let titleLarge = Font.custom(fontFamily, size: 22, relativeTo: .title2).weight(.regular)
-    public static let titleMedium = Font.custom(fontFamily, size: 20, relativeTo: .title3).weight(.regular)
+    /// 22pt Inter Light — section titles, page headers.
+    public static let titleLarge = Font.custom(fontFamily, size: 22, relativeTo: .title2).weight(.light)
+    /// 22pt Inter Medium — section title where Light reads too thin.
+    public static let titleLargeEmphasis = Font.custom(fontFamily, size: 22, relativeTo: .title2).weight(.medium)
+    /// 20pt Inter Medium — sub-headings.
+    public static let titleMedium = Font.custom(fontFamily, size: 20, relativeTo: .title3).weight(.medium)
+    /// 17pt Inter SemiBold — smallest title role (equal to `headline`).
     public static let titleSmall = Font.custom(fontFamily, size: 17, relativeTo: .headline).weight(.semibold)
 
-    // MARK: - Headline / Body
+    // MARK: - Headline / Body (Inter — UI chrome)
 
+    /// 17pt Inter SemiBold — card headers, emphasized labels.
     public static let headline = Font.custom(fontFamily, size: 17, relativeTo: .headline).weight(.semibold)
+    /// 17pt Inter Regular — primary body text.
     public static let body = Font.custom(fontFamily, size: 17, relativeTo: .body).weight(.regular)
+    /// 17pt Inter SemiBold — emphasized body.
     public static let bodyEmphasis = Font.custom(fontFamily, size: 17, relativeTo: .body).weight(.semibold)
+    /// 16pt Inter Regular — secondary body / callout.
+    public static let callout = Font.custom(fontFamily, size: 16, relativeTo: .callout).weight(.regular)
 
-    // MARK: - Subheadline / Caption
+    // MARK: - Subheadline / Caption (Inter)
 
+    /// 15pt Inter Regular — tertiary text, form labels.
     public static let subheadline = Font.custom(fontFamily, size: 15, relativeTo: .subheadline).weight(.regular)
+    /// 15pt Inter SemiBold — emphasized subheadline.
     public static let subheadlineEmphasis = Font.custom(fontFamily, size: 15, relativeTo: .subheadline).weight(.semibold)
+    /// 14pt Inter Regular — descriptions, timestamps.
+    public static let footnote = Font.custom(fontFamily, size: 14, relativeTo: .footnote).weight(.regular)
+    /// 13pt Inter Regular — captions.
     public static let caption = Font.custom(fontFamily, size: 13, relativeTo: .caption).weight(.regular)
+    /// 13pt Inter SemiBold — emphasized caption, badge / chip labels.
     public static let captionEmphasis = Font.custom(fontFamily, size: 13, relativeTo: .caption).weight(.semibold)
+    /// 12pt Inter Regular — smallest UI text.
+    public static let caption2 = Font.custom(fontFamily, size: 12, relativeTo: .caption2).weight(.regular)
+    /// 12pt Inter SemiBold — small emphasized chip / badge labels.
+    public static let caption2Emphasis = Font.custom(fontFamily, size: 12, relativeTo: .caption2).weight(.semibold)
+    /// 12pt Inter Bold — status badges, tight uppercase labels.
+    public static let captionBold = Font.custom(fontFamily, size: 12, relativeTo: .caption2).weight(.bold)
+    /// 11pt Inter Regular — compact component label (non-TC; component-internal use).
     public static let captionSmall = Font.custom(fontFamily, size: 11, relativeTo: .caption2).weight(.regular)
+    /// 11pt Inter SemiBold — compact emphasized component label (non-TC; component-internal use).
     public static let captionSmallEmphasis = Font.custom(fontFamily, size: 11, relativeTo: .caption2).weight(.semibold)
+
+    // MARK: - Unit Labels (Inter — paired with numeric values)
+
+    /// 17pt Inter Regular — unit label next to a large number ("bpm", "W").
+    public static let unitLabel = Font.custom(fontFamily, size: 17, relativeTo: .body).weight(.regular)
+    /// 14pt Inter Regular — small unit label.
+    public static let unitLabelSmall = Font.custom(fontFamily, size: 14, relativeTo: .footnote).weight(.regular)
+
+    // MARK: - Navigation (Inter)
+
+    /// 34pt Inter Regular — UINavigationBar large-title size.
+    public static let navigationLargeTitle = Font.custom(fontFamily, size: 34, relativeTo: .largeTitle).weight(.regular)
+    /// 17pt Inter Regular — inline navigation title.
+    public static let navigationTitle = Font.custom(fontFamily, size: 17, relativeTo: .headline).weight(.regular)
 
     // MARK: - Numeric (IBM Plex Mono — all data values)
 
@@ -80,11 +120,6 @@ public enum TrinityTypography {
 
     /// 11pt IBM Plex Mono Medium — ALL-CAPS section eyebrow label. Pair with `sectionEyebrowTracking`.
     public static let sectionLabel = Font.custom(monoMedium, size: 11, relativeTo: .caption2)
-
-    // MARK: - Navigation
-
-    public static let navigationLargeTitle = Font.custom(fontFamily, size: 28, relativeTo: .title).weight(.regular)
-    public static let navigationTitle = Font.custom(fontFamily, size: 17, relativeTo: .headline).weight(.regular)
 
     // MARK: - Letter Spacing
 

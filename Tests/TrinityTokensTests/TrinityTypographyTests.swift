@@ -35,4 +35,30 @@ struct TrinityTypographyTests {
         #expect(TrinityTypography.chartLabel != TrinityTypography.chartValue)
         #expect(TrinityTypography.sectionLabel != TrinityTypography.captionSmall)
     }
+
+    @Test("Inter ramp exposes all TC role tokens")
+    func interRampCoverage() {
+        // Compilation alone proves these tokens exist; values are visual.
+        _ = TrinityTypography.displayLarge
+        _ = TrinityTypography.displayMedium
+        _ = TrinityTypography.titleLarge
+        _ = TrinityTypography.titleLargeEmphasis
+        _ = TrinityTypography.titleMedium
+        _ = TrinityTypography.callout
+        _ = TrinityTypography.footnote
+        _ = TrinityTypography.caption2
+        _ = TrinityTypography.caption2Emphasis
+        _ = TrinityTypography.captionBold
+        _ = TrinityTypography.unitLabel
+        _ = TrinityTypography.unitLabelSmall
+        _ = TrinityTypography.navigationLargeTitle
+    }
+
+    @Test("Display and title weights differ from their emphasis variants")
+    func weightVariantsAreDistinct() {
+        #expect(TrinityTypography.titleLarge != TrinityTypography.titleLargeEmphasis)
+        #expect(TrinityTypography.caption2 != TrinityTypography.caption2Emphasis)
+        #expect(TrinityTypography.callout != TrinityTypography.body)
+        #expect(TrinityTypography.footnote != TrinityTypography.caption)
+    }
 }

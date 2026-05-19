@@ -4,11 +4,10 @@ import Testing
 @Suite("TrinitySpacing")
 struct TrinitySpacingTests {
 
-    @Test("Base units have expected values")
+    @Test("Base units have expected values — TC-faithful scale")
     func baseUnits() {
         #expect(TrinitySpacing.hairline == 2)
-        #expect(TrinitySpacing.xxs == 4)
-        #expect(TrinitySpacing.xs == 6)
+        #expect(TrinitySpacing.xs == 4)
         #expect(TrinitySpacing.sm == 8)
         #expect(TrinitySpacing.md == 12)
         #expect(TrinitySpacing.lg == 16)
@@ -16,6 +15,11 @@ struct TrinitySpacingTests {
         #expect(TrinitySpacing.xxl == 24)
         #expect(TrinitySpacing.huge == 32)
         #expect(TrinitySpacing.touch == 44)
+    }
+
+    @Test("xxs is a deprecated soft-alias of xs")
+    func xxsAliasesXs() {
+        #expect(TrinitySpacing.xxs == TrinitySpacing.xs)
     }
 
     @Test("Semantic aliases resolve to base units")

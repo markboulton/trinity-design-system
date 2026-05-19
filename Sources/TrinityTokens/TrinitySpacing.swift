@@ -7,10 +7,12 @@ import CoreGraphics
 public enum TrinitySpacing {
 
     // MARK: - Base Units
+    //
+    // 4pt scale matching TRT Companion (TCSpacing). `xxs` is a deprecated
+    // soft-alias of `xs` retained only for existing call sites.
 
     public static let hairline: CGFloat = 2
-    public static let xxs: CGFloat = 4
-    public static let xs: CGFloat = 6
+    public static let xs: CGFloat = 4
     public static let sm: CGFloat = 8
     public static let md: CGFloat = 12
     public static let lg: CGFloat = 16
@@ -20,6 +22,10 @@ public enum TrinitySpacing {
 
     /// Minimum tap target (Apple HIG).
     public static let touch: CGFloat = 44
+
+    /// Deprecated — equals `xs` (4pt). TC has no sub-`xs` unit. Use `xs` or `hairline`.
+    @available(*, deprecated, message: "Use TrinitySpacing.xs (TC has no xxs unit).")
+    public static let xxs: CGFloat = xs
 
     // MARK: - Semantic Aliases
 

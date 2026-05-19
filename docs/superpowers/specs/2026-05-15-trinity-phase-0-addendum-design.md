@@ -101,20 +101,18 @@ Every new component gets a section in the appropriate Gallery page (AtomsPage / 
 
 ---
 
-## Task Sequencing (Tasks 40–47)
+## Implementation Status
 
-Dependencies flow atom → molecule → organism.
-
-| Task | Component | Layer | Key dependency |
-|------|-----------|-------|----------------|
-| 40 | `TrinityProgressBar` | Atom | None |
-| 41 | `TrinitySegmentedFilter` | Atom | None |
-| 42 | `TrinityTextField` (+ inputs) | Atom | TC audit determines full input set |
-| 43 | `TrinityCardHeader` | Molecule | None beyond existing Trinity |
-| 44 | `TrinityEmptyState` | Molecule | `TrinityButton` (exists) |
-| 45 | `TrinityErrorState` | Molecule | `TrinityButton` (exists), visual language from Task 44 |
-| 46 | `TrinityMetricCard` | Molecule | `TrinityLineSparkline`, `TrinityBarSparkline` (exist); `TrinityTrend` defined in this task |
-| 47 | `TrinityDataChart` | Organism | Swift Charts; most complex — audit TC carefully before implementing |
+| Task | Component | Status |
+|------|-----------|--------|
+| 40 | `TrinityProgressBar` | ✅ Pre-existing (earlier Phase 0 work) |
+| 41 | `TrinitySegmentedFilter` | ✅ Pre-existing |
+| 42 | `TrinityTextField` | ✅ Pre-existing |
+| 43 | `TrinityEmptyState` | ✅ Pre-existing |
+| 44 | `TrinityErrorState` | ✅ Pre-existing |
+| 45 | `TrinityCardHeader` | ✅ Implemented (plan tasks 40–41) |
+| 46 | `TrinityMetricCard` | ✅ Implemented (plan task 41) |
+| 47 | `TrinityMultiSeriesChart` | ✅ Implemented (plan task 42) |
 
 Each task follows the same structure:
 1. Read TC canonical source

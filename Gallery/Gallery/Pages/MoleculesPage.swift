@@ -7,10 +7,13 @@ struct MoleculesPage: View {
 
     @Environment(\.theme) private var theme
 
+    private let metricBars: [Double] = [3200, 5100, 4800, 6200, 7100, 3900, 5500]
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: TrinitySpacing.sectionSpacing) {
                 cardHeaderSection
+                metricCardSection
                 cardSection
                 metricRowSection
                 emptyStateSection
@@ -42,6 +45,32 @@ struct MoleculesPage: View {
                 icon: "lightbulb.fill",
                 trailingAction: .init(label: "See all") {}
             )
+        }
+    }
+
+    private var metricCardSection: some View {
+        VStack(alignment: .leading, spacing: TrinitySpacing.md) {
+            Text("TrinityMetricCard").font(TrinityTypography.titleMedium)
+            TrinityCard {
+                VStack(spacing: TrinitySpacing.cardContentSpacing) {
+                    TrinityMetricCard(
+                        category: "Recovery",
+                        value: "82",
+                        unit: "/100",
+                        trend: .init(displayText: "+6", direction: .up)
+                    )
+                    Divider()
+                    TrinityMetricCard(
+                        category: "Volume",
+                        value: "14,200",
+                        unit: "kg",
+                        trend: .init(displayText: "+8%", direction: .up)
+                    ) {
+                        TrinityBarSparkline(values: metricBars, tint: theme.accent)
+                            .frame(height: 28)
+                    }
+                }
+            }
         }
     }
 

@@ -14,6 +14,7 @@ let package = Package(
         .target(name: "TrinityTheme", dependencies: ["TrinityTokens"]),
         .target(name: "TrinityComponents", dependencies: ["TrinityTokens", "TrinityTheme"]),
         .testTarget(name: "TrinityTokensTests", dependencies: ["TrinityTokens"]),
-        .testTarget(name: "TrinityThemeTests", dependencies: ["TrinityTheme"])
+        .testTarget(name: "TrinityThemeTests", dependencies: ["TrinityTheme"]),
+        .testTarget(name: "TrinityComponentsTests", dependencies: ["TrinityComponents"])
     ]
 )

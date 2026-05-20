@@ -136,6 +136,72 @@ fix it here.
 - **Navigation:** use a single parent NavigationStack with `navigationDestination(for:)`.
 - **States:** use `TrinityEmptyState` / `TrinityErrorState` — never inline text or toasts for these states.
 
+## Breaking changes (producer-side)
+
+These rules apply when you are *changing Trinity itself*, not consuming it.
+
+### The invariant
+
+`origin/main` must always compile for VeloReady, GymReady, and TRT Companion.
+Apps track `branch: "main"` via SPM. The moment a developer in any app clicks
+"Update to Latest Package Versions", whatever is on `origin/main` lands in
+their build. There is no version range, no semver gate. The discipline below
+is the gate.
+
+### What counts as breaking
+
+Source-breaking for consumers — must go through the deprecate-then-remove
+cycle:
+
+- Renaming a public type, property, function, enum case, or extension member.
+- Removing any public symbol.
+- Changing a function signature (parameter labels, types, order, count, or
+  defaults callers relied on).
+- Changing a public property's type.
+- Removing or adding a case to a non-`@frozen` public enum (additions break
+  exhaustive switches in consumers).
+- Tightening generic constraints on a public type.
+- Narrowing visibility (`public` → `internal` / `package` / `private`).
+- Adding, renaming, or removing a `Theme` protocol requirement.
+
+Not breaking — safe to commit straight to `main`:
+
+- Adding a brand-new public symbol.
+- Adding optional initializer parameters with default values.
+- Adding a protocol requirement that ships with a default implementation in
+  an extension.
+- Internal/private changes; documentation; formatting.
+
+### The deprecate-then-remove process
+
+1. **Trinity PR 1** — add the new API alongside the old, mark the old
+   `@available(*, deprecated, message: "Use X instead.")`. Update
+   `PublicAPISnapshot.swift` to reference both. Build + tests green. Merge.
+2. **Per-consumer PRs** — each of VR / GR / TC runs `swift package update`,
+   migrates call sites away from the deprecation warning, commits
+   `Package.resolved`, ships on its own cadence.
+3. **Trinity PR 2** — remove the deprecated symbol and its snapshot entry.
+   Build + tests green. Merge.
+
+Never skip step 2. Never delete a symbol any consumer still references.
+
+### Machine enforcement
+
+`Tests/TrinityComponentsTests/PublicAPISnapshot.swift` constructs every
+public Trinity type, every public init signature, every nested enum case,
+every token, and every `View` extension. It is compile-as-test: the test
+passes if the file compiles. A rename or removal without a deprecation
+shim makes the snapshot stop compiling, which fails `swift test`.
+
+The discipline:
+
+- New public symbol → add a snapshot entry in the same PR.
+- Snapshot fails to compile because of your change → that is the test
+  working. Do not delete lines to make it pass. Restore the symbol, or
+  move it through the deprecation cycle.
+
+Run `swift build && swift test` before every push.
+
 ## Escape hatches
 
 These rules are guidance, not handcuffs. If a Trinity modifier doesn't cover

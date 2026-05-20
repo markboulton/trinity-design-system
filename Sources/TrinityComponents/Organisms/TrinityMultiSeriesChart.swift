@@ -224,19 +224,26 @@ private func makeDemoPoints(count: Int, base: Double, variance: Double) -> [Trin
     .theme(DemoTRTTheme())
 }
 
-#Preview("Multi-series with legend") {
-    TrinityChartCard(title: "Training Load") {
-        TrinityMultiSeriesChart(
-            series: [
-                .init(name: "CTL", points: makeDemoPoints(count: 28, base: 55, variance: 5), color: Color(red: 0.145, green: 0.388, blue: 0.922)),
-                .init(name: "ATL", points: makeDemoPoints(count: 28, base: 62, variance: 8), color: Color(red: 0.976, green: 0.451, blue: 0.086)),
-            ],
-            baseline: 50,
-            yAxisLabel: "TSS"
-        )
-        .frame(height: 150)
+private struct _MultiSeriesLegendPreview: View {
+    @Environment(\.theme) private var theme
+    var body: some View {
+        TrinityChartCard(title: "Training Load") {
+            TrinityMultiSeriesChart(
+                series: [
+                    .init(name: "CTL", points: makeDemoPoints(count: 28, base: 55, variance: 5), color: theme.accent),
+                    .init(name: "ATL", points: makeDemoPoints(count: 28, base: 62, variance: 8), color: theme.chartSecondary),
+                ],
+                baseline: 50,
+                yAxisLabel: "TSS"
+            )
+            .frame(height: 150)
+        }
+        .padding(TrinitySpacing.lg)
+        .theme(DemoTRTTheme())
     }
-    .padding(TrinitySpacing.lg)
-    .theme(DemoTRTTheme())
+}
+
+#Preview("Multi-series with legend") {
+    _MultiSeriesLegendPreview()
 }
 #endif

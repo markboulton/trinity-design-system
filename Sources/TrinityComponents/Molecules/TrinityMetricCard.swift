@@ -5,12 +5,12 @@ import TrinityTheme
 // MARK: - Trend types
 
 /// Directional indicator for a `TrinityMetricCard` trend badge.
-public enum TrinityTrendDirection {
+public enum TrinityTrendDirection: CaseIterable, Sendable {
     case up, down, neutral
 }
 
 /// A trend badge value shown on a `TrinityMetricCard`.
-public struct TrinityTrend {
+public struct TrinityTrend: Sendable {
     public let displayText: String       // e.g. "+8%" or "↑ 3"
     public let direction: TrinityTrendDirection
 
@@ -49,8 +49,8 @@ public struct TrinityMetricCard<Sparkline: View>: View {
 
     public let category: String
     public let value: String
-    public var unit: String?
-    public var trend: TrinityTrend?
+    public let unit: String?
+    public let trend: TrinityTrend?
     @ViewBuilder public var sparkline: () -> Sparkline
 
     public init(
@@ -104,7 +104,7 @@ public struct TrinityMetricCard<Sparkline: View>: View {
                         .font(TrinityTypography.captionEmphasis)
                         .foregroundStyle(trendColor)
                         .padding(.horizontal, TrinitySpacing.xs)
-                        .padding(.vertical, 2)
+                        .padding(.vertical, 2) // sub-token: no xxxs step in TrinitySpacing
                         .background(trendColor.opacity(TrinityOpacity.tonalFill))
                         .clipShape(RoundedRectangle(cornerRadius: TrinityRadii.button))
                 }

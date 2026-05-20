@@ -7,7 +7,7 @@ import TrinityTheme
 
 /// A single date-value point used by `TrinityMultiSeriesChart` and `TrinityChartSeries`.
 public struct TrinityDataPoint: Identifiable {
-    public let id = UUID()
+    public var id: Date { date }
     public let date: Date
     public let value: Double
 
@@ -19,7 +19,7 @@ public struct TrinityDataPoint: Identifiable {
 
 /// One named series of data points for use in `TrinityMultiSeriesChart`.
 public struct TrinityChartSeries: Identifiable {
-    public let id = UUID()
+    public var id: String { name }
     public let name: String
     public let points: [TrinityDataPoint]
     public let color: Color
@@ -67,12 +67,12 @@ public struct TrinityMultiSeriesChart: View {
 
     public let series: [TrinityChartSeries]
     /// Optional dashed horizontal baseline RuleMark.
-    public var baseline: Double?
+    public let baseline: Double?
     /// `nil` = auto: legend shown when `series.count > 1`.
     /// `false` = always hidden. `true` = always shown.
-    public var showLegend: Bool?
-    public var yAxisLabel: String
-    public var yRange: ClosedRange<Double>?
+    public let showLegend: Bool?
+    public let yAxisLabel: String
+    public let yRange: ClosedRange<Double>?
 
     public init(
         series: [TrinityChartSeries],
@@ -167,6 +167,7 @@ public struct TrinityMultiSeriesChart: View {
         HStack(spacing: TrinitySpacing.md) {
             ForEach(series) { s in
                 HStack(spacing: TrinitySpacing.xxs) {
+                    // sub-token geometry: no xxxs step in TrinitySpacing
                     RoundedRectangle(cornerRadius: 1)
                         .fill(s.color)
                         .frame(width: 12, height: 2)
@@ -183,8 +184,10 @@ public struct TrinityMultiSeriesChart: View {
     private var chartYDomain: ClosedRange<Double> {
         if let range = yRange { return range }
         let values = allPoints.map(\.value)
-        let minVal = (values.min() ?? 0) * 0.9
-        let maxVal = (values.max() ?? 1) * 1.1
+        var candidates = [values.min() ?? 0, values.max() ?? 1]
+        if let b = baseline { candidates.append(b) }
+        let minVal = (candidates.min()! * 0.9)
+        let maxVal = (candidates.max()! * 1.1)
         return max(minVal, 0)...max(maxVal, 1)
     }
 

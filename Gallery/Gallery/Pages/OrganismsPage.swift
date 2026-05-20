@@ -116,10 +116,10 @@ struct OrganismsPage: View {
                     series: [
                         .init(name: "CTL",
                               points: Self.sampleCTL,
-                              color: Color(red: 0.145, green: 0.388, blue: 0.922)),
+                              color: theme.accent),
                         .init(name: "ATL",
                               points: Self.sampleATL,
-                              color: Color(red: 0.976, green: 0.451, blue: 0.086))
+                              color: theme.chartSecondary)
                     ],
                     baseline: 50,
                     yAxisLabel: "TSS"

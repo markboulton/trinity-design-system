@@ -81,7 +81,7 @@ Task 33 (TrinityLineSparkline / TrinityBarSparkline) reviewed 2026-05-11 — APP
 Tasks 35–36 (TrinityRangeChart + TrinitySkeletonView) reviewed 2026-05-11 — both APPROVED, no critical violations.
 
 Established conventions from Tasks 35–36:
-- `Bucket.id = UUID()` on a value-type struct generates a new UUID on every construction. If the parent view rebuilds the array, ForEach treats all items as new and re-renders the chart. For chart data structs, prefer `date` (or another stable property) as the Identifiable id, or accept `id` in the init.
+- `Bucket.id = UUID()` on a value-type struct generates a new UUID on every construction. If the parent view rebuilds the array, ForEach treats all items as new and re-renders the chart. For chart data structs, prefer `date` (or another stable property) as the Identifiable id, or accept `id` in the init. This pattern recurred in TrinityDataPoint and TrinityChartSeries (Tasks 40-42 review).
 - `withAnimation(.repeatForever)` driven by @State boolean is the correct SwiftUI looping animation pattern (not a DispatchQueue leak). However: if `onAppear` fires again while `isAnimating` is already true (which happens on NavigationStack push/pop), a second animation transaction layers on top. Guard with `guard !isAnimating else { return }` inside `onAppear` to prevent this.
 - `LinearGradient(colors:startPoint:endPoint:)` with `.leading`/`.trailing` + `.rotationEffect(.degrees(90))` is a correct implementation of a vertical shimmer sweep. The rotation turns the horizontal gradient into a vertical one — both directions are equivalent for the offset-based animation.
 - `yDomain` pattern for Charts: include baseline in the candidates array alongside data min/max so the domain automatically expands to show the reference line. `[minY, maxY, baseline ?? minY]` is the idiom used here and should be the template for future chart components.
@@ -93,6 +93,21 @@ Established conventions from TrinityInfoBanner review:
 - Public enums in TrinityComponents should declare `Sendable` explicitly, consistent with TrinityTokens conventions, even when implicit conformance holds.
 - `TrinitySeverity` is the first publicly-typed severity enum in TrinityComponents. Future components that introduce their own status/state enum should follow the same pattern: `public enum XSeverity: Sendable { ... }`.
 
+Tasks 40–42 (TrinityCardHeader + TrinityMetricCard + TrinityMultiSeriesChart) reviewed 2026-05-20 — APPROVED WITH FIXES. 0 critical violations. 5 important issues and 4 minor issues flagged.
+
+Important issues from Tasks 40-42:
+- `TrinityTrendDirection` and `TrinityTrend` (TrinityMetricCard.swift) lack explicit `Sendable` conformance — established convention per TrinityCategoryToken. TrinityTrend's handler-free struct is implicitly Sendable but should be explicit.
+- `TrinityDataPoint.id = UUID()` and `TrinityChartSeries.id = UUID()` generate new UUIDs on every construction — same known bug as TrinityRangeChart's Bucket.id. If caller rebuilds arrays, ForEach sees all items as new. Fix: use `date` as id for TrinityDataPoint, or add an `id: UUID` parameter to the init.
+- `chartYDomain` in TrinityMultiSeriesChart does not include `baseline` in the candidates array. If `baseline: 50` is passed but all data is 55-65, the domain is computed as 49.5...71.5 which clips the rule mark or forces an awkward scale. Established fix: include baseline in candidates (`[minVal, maxVal, baseline ?? minVal].min()/max()`).
+- `TrinityChartSeries.color: Color` is a direct Color stored property — callers passing hardcoded Color(red:green:blue:) literals (as OrganismsPage previously did) violates the no-hardcoded-Color rule at the call site. FIXED in commit 9b9eceb (OrganismsPage) and cb67dfa (TrinityMultiSeriesChart #Preview). Both now use theme.accent / theme.chartSecondary via @Environment(\.theme). Caller-provided Color is an approved pattern when the caller obtains the value from their own theme environment.
+- `public var unit` and `public var trend` in TrinityMetricCard should be `public let` — they are set once in init and never mutated. `var` on a SwiftUI View struct property is misleading and may trigger unnecessary re-renders.
+
+Minor issues from Tasks 40-42:
+- `.padding(.vertical, 2)` in TrinityMetricCard trend badge is a sub-token literal. TrinitySpacing has no xxxs step. Same known pattern from Tasks 14-15. Add explanatory comment.
+- Legend swatch in TrinityMultiSeriesChart uses `.frame(width: 12, height: 2)` and `cornerRadius: 1` — pixel-perfect geometry with no token equivalent. Same repeating sub-token pattern. Add comment.
+- No companion test file for any of the three components (continuing repeating pattern — now 8+ components without tests).
+- OrganismsPage.multiSeriesChartSection previously used `Color(red: 0.145…)` hardcoded literals. FIXED — now uses `theme.accent` and `theme.chartSecondary` via `@Environment(\.theme)` (commit 9b9eceb + cb67dfa).
+
 Task 38 (TrinityFlowLayout) reviewed 2026-05-11 — APPROVED. All 7 spec requirements met. Layout math is correct including single-item row handling, empty-subviews case, and inter-row spacing guard. Two warnings: (1) `placeSubviews` advances `y` by `rowHeight + spacing` after every row including the last — benign because the final `y` value is discarded, but inconsistent with `sizeThatFits` which guards `if index < rows.count - 1`; (2) redundant `.theme(DemoTRTTheme())` in #Preview — no subview reads environment, so the call has no effect and contradicts the "pure layout, no theme environment" preview intent. No companion test file (continuing repeating pattern). AtomsPage flowLayoutSection: 8 chips, TrinitySpacing.xs, wired after skeletonSection — all correct.
 
 Established conventions from TrinityFlowLayout review:
@@ -102,3 +117,4 @@ Established conventions from TrinityFlowLayout review:
 - `computeRows` correctly uses `subview.sizeThatFits(.unspecified)` to get the intrinsic size. This is the right proposal for chips/labels that should size to their content.
 - Gallery `flowLayoutSection` correctly uses `theme.accentSubtle` via `@Environment(\.theme)` (inherited from NavigationStack). Component `#Preview` correctly uses `DemoTRTTheme().accentSubtle` directly. Both patterns are correct for their contexts.
 - The `#if canImport(UIKit)` guard on `#Preview` is consistently applied across all molecule previews — correct pattern, flag any preview block that omits this guard.
+- When a `#Preview` block needs to read `@Environment(\.theme)`, the correct fix is to extract it into a private `_XxxPreview: View` struct with `@Environment(\.theme) private var theme`, then call `.theme(DemoXTheme())` on its body. The bare `#Preview { }` closure has no property wrapper support and cannot read environment directly. This pattern was established in cb67dfa (_MultiSeriesLegendPreview). Flag any future preview that tries to access theme properties inside a bare #Preview closure.

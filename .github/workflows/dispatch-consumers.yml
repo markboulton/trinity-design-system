@@ -1,0 +1,36 @@
+name: Notify consumers of Trinity update
+
+# Fires a repository_dispatch event at each consumer app whenever main
+# advances. Each consumer's own update-trinity workflow listens for this
+# event and opens a PR bumping Package.resolved to the new Trinity tip.
+#
+# Webhook-driven so it costs nothing when Trinity is idle; bumps land in
+# consumer PR queues within seconds of a Trinity push.
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest  # cheap — this job only makes an HTTP call
+    strategy:
+      fail-fast: false
+      matrix:
+        consumer:
+          - { owner: markboulton, repo: veloready }
+          - { owner: markboulton, repo: meso }
+    steps:
+      - name: Dispatch trinity-updated to ${{ matrix.consumer.owner }}/${{ matrix.consumer.repo }}
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.CONSUMER_DISPATCH_TOKEN }}
+          repository: ${{ matrix.consumer.owner }}/${{ matrix.consumer.repo }}
+          event-type: trinity-updated
+          client-payload: |
+            {
+              "trinity_sha": "${{ github.sha }}",
+              "trinity_ref": "${{ github.ref }}",
+              "trinity_commit_message": ${{ toJSON(github.event.head_commit.message) }},
+              "trinity_compare_url": "${{ github.event.compare }}"
+            }

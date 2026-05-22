@@ -27,6 +27,7 @@ jobs:
         consumer:
           - { owner: markboulton, repo: veloready }
           - { owner: markboulton, repo: meso }
+          - { owner: markboulton, repo: gymready }
     steps:
       - name: Dispatch trinity-updated to ${{ matrix.consumer.owner }}/${{ matrix.consumer.repo }}
         uses: peter-evans/repository-dispatch@v3

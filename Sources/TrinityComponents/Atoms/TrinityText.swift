@@ -20,7 +20,9 @@ public struct TrinityText: View {
     public enum Style {
         case displayLarge
         case displayMedium
+        case navigationLargeTitle
         case titleLarge
+        case titleLargeEmphasis
         case titleMedium
         case titleSmall
         case headline
@@ -30,6 +32,7 @@ public struct TrinityText: View {
         case subheadlineEmphasis
         case caption
         case captionEmphasis
+        case caption2
         case captionSmall
         case captionSmallEmphasis
         case numericLarge
@@ -42,7 +45,9 @@ public struct TrinityText: View {
             switch self {
             case .displayLarge:         return TrinityTypography.displayLarge
             case .displayMedium:        return TrinityTypography.displayMedium
+            case .navigationLargeTitle: return TrinityTypography.navigationLargeTitle
             case .titleLarge:           return TrinityTypography.titleLarge
+            case .titleLargeEmphasis:   return TrinityTypography.titleLargeEmphasis
             case .titleMedium:          return TrinityTypography.titleMedium
             case .titleSmall:           return TrinityTypography.titleSmall
             case .headline:             return TrinityTypography.headline
@@ -52,6 +57,7 @@ public struct TrinityText: View {
             case .subheadlineEmphasis:  return TrinityTypography.subheadlineEmphasis
             case .caption:              return TrinityTypography.caption
             case .captionEmphasis:      return TrinityTypography.captionEmphasis
+            case .caption2:             return TrinityTypography.caption2
             case .captionSmall:         return TrinityTypography.captionSmall
             case .captionSmallEmphasis: return TrinityTypography.captionSmallEmphasis
             case .numericLarge:         return TrinityTypography.numericLarge
@@ -90,7 +96,7 @@ public struct TrinityText: View {
 
     private var defaultColor: Color {
         switch style {
-        case .caption, .captionEmphasis, .captionSmall, .captionSmallEmphasis,
+        case .caption, .captionEmphasis, .caption2, .captionSmall, .captionSmallEmphasis,
              .subheadline, .subheadlineEmphasis:
             return theme.labelSecondary
         case .sectionEyebrow:

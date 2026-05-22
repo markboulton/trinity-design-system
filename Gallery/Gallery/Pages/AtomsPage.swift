@@ -21,6 +21,7 @@ struct AtomsPage: View {
             VStack(alignment: .leading, spacing: TrinitySpacing.sectionSpacing) {
                 buttonSection
                 badgeSection
+                statusBadgeSection
                 segmentedFilterSection
                 progressSection
                 toggleChipSection
@@ -58,6 +59,22 @@ struct AtomsPage: View {
             HStack(spacing: TrinitySpacing.sm) {
                 TrinityBadge(text: "Trinity Pro", size: .regular)
                 TrinityBadge(text: "Pro", size: .small)
+            }
+        }
+    }
+
+    private var statusBadgeSection: some View {
+        VStack(alignment: .leading, spacing: TrinitySpacing.md) {
+            Text("TrinityStatusBadge").font(TrinityTypography.titleMedium)
+            HStack(spacing: TrinitySpacing.sm) {
+                TrinityStatusBadge("OPTIMAL", style: .success)
+                TrinityStatusBadge("HIGH", style: .warning)
+                TrinityStatusBadge("POOR", style: .error)
+            }
+            HStack(spacing: TrinitySpacing.sm) {
+                TrinityStatusBadge("SYNCED", style: .success, weight: .subtle)
+                TrinityStatusBadge("INFO", style: .info, weight: .subtle)
+                TrinityStatusBadge("NEW", style: .info, icon: "sparkles")
             }
         }
     }

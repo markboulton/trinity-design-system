@@ -433,6 +433,18 @@ struct AtomSurfaceTests {
         _ = TrinityBadge(text: "B", size: .regular)
     }
 
+    @Test func statusBadge() {
+        _ = TrinityStatusBadge("B")
+        _ = TrinityStatusBadge("B", style: .success)
+        _ = TrinityStatusBadge("B", style: .warning)
+        _ = TrinityStatusBadge("B", style: .error)
+        _ = TrinityStatusBadge("B", style: .info)
+        _ = TrinityStatusBadge("B", style: .neutral)
+        _ = TrinityStatusBadge("B", style: .success, weight: .standard)
+        _ = TrinityStatusBadge("B", style: .success, weight: .subtle)
+        _ = TrinityStatusBadge("B", style: .info, weight: .standard, icon: "sparkles")
+    }
+
     @Test func barSparkline() {
         _ = TrinityBarSparkline(values: [1, 2, 3], tint: .blue)
     }
@@ -517,7 +529,9 @@ struct AtomSurfaceTests {
         // All public styles
         _ = TrinityText("x", style: .displayLarge)
         _ = TrinityText("x", style: .displayMedium)
+        _ = TrinityText("x", style: .navigationLargeTitle)
         _ = TrinityText("x", style: .titleLarge)
+        _ = TrinityText("x", style: .titleLargeEmphasis)
         _ = TrinityText("x", style: .titleMedium)
         _ = TrinityText("x", style: .titleSmall)
         _ = TrinityText("x", style: .headline)
@@ -527,6 +541,7 @@ struct AtomSurfaceTests {
         _ = TrinityText("x", style: .subheadlineEmphasis)
         _ = TrinityText("x", style: .caption)
         _ = TrinityText("x", style: .captionEmphasis)
+        _ = TrinityText("x", style: .caption2)
         _ = TrinityText("x", style: .captionSmall)
         _ = TrinityText("x", style: .captionSmallEmphasis)
         _ = TrinityText("x", style: .numericLarge)

@@ -82,11 +82,13 @@ struct TokensPage: View {
         VStack(alignment: .leading, spacing: TrinitySpacing.md) {
             Text("Status (universal)").font(TrinityTypography.titleMedium).foregroundStyle(theme.labelPrimary)
             colourRow("success", TrinityStatusColors.success)
+            colourRow("caution", TrinityStatusColors.caution)
             colourRow("warning", TrinityStatusColors.warning)
             colourRow("error", TrinityStatusColors.error)
             colourRow("markerInRange", TrinityStatusColors.markerInRange)
             colourRow("markerOutOfRange", TrinityStatusColors.markerOutOfRange)
             colourRow("wellnessGreen", TrinityStatusColors.wellnessGreen)
+            colourRow("wellnessYellow", TrinityStatusColors.wellnessYellow)
             colourRow("wellnessAmber", TrinityStatusColors.wellnessAmber)
             colourRow("wellnessRed", TrinityStatusColors.wellnessRed)
         }

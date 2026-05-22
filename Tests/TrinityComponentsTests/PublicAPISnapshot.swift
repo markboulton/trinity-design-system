@@ -341,13 +341,19 @@ struct TokenSurfaceTests {
 
     @Test func statusColors() {
         _ = TrinityStatusColors.success
+        _ = TrinityStatusColors.caution
         _ = TrinityStatusColors.warning
         _ = TrinityStatusColors.error
         _ = TrinityStatusColors.wellnessGreen
+        _ = TrinityStatusColors.wellnessYellow
         _ = TrinityStatusColors.wellnessAmber
         _ = TrinityStatusColors.wellnessRed
         _ = TrinityStatusColors.markerInRange
         _ = TrinityStatusColors.markerOutOfRange
+    }
+
+    @Test func adaptiveColor() {
+        _ = Color.adaptive(light: .white, dark: .black)
     }
 
     @Test func brandColors() {

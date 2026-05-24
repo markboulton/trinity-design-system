@@ -48,8 +48,13 @@ public struct TrinityCompoundMetricCard<Trailing: View, BottomContent: View>: Vi
     public let unit: String?
     /// When set, renders a relative date caption below the hero value.
     public let lastUpdated: Date?
-    /// When set, the card becomes tappable and shows a trailing chevron.
+    /// When set, the card becomes tappable and wraps content in a `Button`.
     public let onTap: (() -> Void)?
+    /// Show a trailing chevron independent of `onTap`. Use inside a
+    /// `NavigationLink` label where the card itself should not be a `Button`.
+    public let showChevron: Bool
+    /// Show a small spinner next to the eyebrow label while data loads.
+    public let isLoading: Bool
     public let rows: [Row]
     /// When set, colours the eyebrow label with this tint — use category colours
     /// (e.g. `theme.categoryColor(.heart)`) to identify metric type at a glance.
@@ -65,6 +70,8 @@ public struct TrinityCompoundMetricCard<Trailing: View, BottomContent: View>: Vi
         unit: String? = nil,
         lastUpdated: Date? = nil,
         onTap: (() -> Void)? = nil,
+        showChevron: Bool = false,
+        isLoading: Bool = false,
         rows: [Row] = [],
         tint: Color? = nil,
         @ViewBuilder trailingContent: @escaping () -> Trailing,
@@ -75,6 +82,8 @@ public struct TrinityCompoundMetricCard<Trailing: View, BottomContent: View>: Vi
         self.unit = unit
         self.lastUpdated = lastUpdated
         self.onTap = onTap
+        self.showChevron = showChevron
+        self.isLoading = isLoading
         self.rows = rows
         self.tint = tint
         self.trailingContent = trailingContent
@@ -133,11 +142,18 @@ public struct TrinityCompoundMetricCard<Trailing: View, BottomContent: View>: Vi
         VStack(alignment: .leading, spacing: TrinitySpacing.sm) {
             // Header row: eyebrow label left, date + chevron right
             HStack(alignment: .center, spacing: TrinitySpacing.sm) {
-                Text(label)
-                    .font(TrinityTypography.captionSmallEmphasis)
-                    .textCase(.uppercase)
-                    .tracking(TrinityTypography.sectionEyebrowTracking)
-                    .foregroundStyle(tint ?? theme.labelSecondary)
+                HStack(spacing: TrinitySpacing.xs) {
+                    Text(label)
+                        .font(TrinityTypography.captionSmallEmphasis)
+                        .textCase(.uppercase)
+                        .tracking(TrinityTypography.sectionEyebrowTracking)
+                        .foregroundStyle(tint ?? theme.labelSecondary)
+
+                    if isLoading {
+                        ProgressView()
+                            .controlSize(.mini)
+                    }
+                }
 
                 Spacer()
 
@@ -146,7 +162,7 @@ public struct TrinityCompoundMetricCard<Trailing: View, BottomContent: View>: Vi
                         .font(TrinityTypography.caption)
                         .foregroundStyle(theme.labelSecondary)
                 }
-                if onTap != nil {
+                if onTap != nil || showChevron {
                     Image(systemName: TrinityIcons.chevronRight)
                         .frame(width: TrinityIcons.Size.small, height: TrinityIcons.Size.small)
                         .font(TrinityTypography.captionEmphasis)
@@ -215,6 +231,8 @@ extension TrinityCompoundMetricCard where BottomContent == EmptyView {
         unit: String? = nil,
         lastUpdated: Date? = nil,
         onTap: (() -> Void)? = nil,
+        showChevron: Bool = false,
+        isLoading: Bool = false,
         rows: [Row] = [],
         tint: Color? = nil,
         @ViewBuilder trailingContent: @escaping () -> Trailing
@@ -225,6 +243,8 @@ extension TrinityCompoundMetricCard where BottomContent == EmptyView {
             unit: unit,
             lastUpdated: lastUpdated,
             onTap: onTap,
+            showChevron: showChevron,
+            isLoading: isLoading,
             rows: rows,
             tint: tint,
             trailingContent: trailingContent,
@@ -242,6 +262,8 @@ extension TrinityCompoundMetricCard where Trailing == EmptyView, BottomContent =
         unit: String? = nil,
         lastUpdated: Date? = nil,
         onTap: (() -> Void)? = nil,
+        showChevron: Bool = false,
+        isLoading: Bool = false,
         rows: [Row] = [],
         tint: Color? = nil
     ) {
@@ -251,6 +273,8 @@ extension TrinityCompoundMetricCard where Trailing == EmptyView, BottomContent =
             unit: unit,
             lastUpdated: lastUpdated,
             onTap: onTap,
+            showChevron: showChevron,
+            isLoading: isLoading,
             rows: rows,
             tint: tint,
             trailingContent: { EmptyView() },

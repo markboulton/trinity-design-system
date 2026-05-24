@@ -51,6 +51,9 @@ public struct TrinityCompoundMetricCard<Trailing: View, BottomContent: View>: Vi
     /// When set, the card becomes tappable and shows a trailing chevron.
     public let onTap: (() -> Void)?
     public let rows: [Row]
+    /// When set, colours the eyebrow label with this tint — use category colours
+    /// (e.g. `theme.categoryColor(.heart)`) to identify metric type at a glance.
+    public let tint: Color?
     @ViewBuilder public let trailingContent: () -> Trailing
     @ViewBuilder public let bottomContent: () -> BottomContent
 
@@ -63,6 +66,7 @@ public struct TrinityCompoundMetricCard<Trailing: View, BottomContent: View>: Vi
         lastUpdated: Date? = nil,
         onTap: (() -> Void)? = nil,
         rows: [Row] = [],
+        tint: Color? = nil,
         @ViewBuilder trailingContent: @escaping () -> Trailing,
         @ViewBuilder bottomContent: @escaping () -> BottomContent
     ) {
@@ -72,6 +76,7 @@ public struct TrinityCompoundMetricCard<Trailing: View, BottomContent: View>: Vi
         self.lastUpdated = lastUpdated
         self.onTap = onTap
         self.rows = rows
+        self.tint = tint
         self.trailingContent = trailingContent
         self.bottomContent = bottomContent
     }
@@ -132,7 +137,7 @@ public struct TrinityCompoundMetricCard<Trailing: View, BottomContent: View>: Vi
                     .font(TrinityTypography.captionSmallEmphasis)
                     .textCase(.uppercase)
                     .tracking(TrinityTypography.sectionEyebrowTracking)
-                    .foregroundStyle(theme.labelSecondary)
+                    .foregroundStyle(tint ?? theme.labelSecondary)
 
                 Spacer()
 
@@ -211,6 +216,7 @@ extension TrinityCompoundMetricCard where BottomContent == EmptyView {
         lastUpdated: Date? = nil,
         onTap: (() -> Void)? = nil,
         rows: [Row] = [],
+        tint: Color? = nil,
         @ViewBuilder trailingContent: @escaping () -> Trailing
     ) {
         self.init(
@@ -220,6 +226,7 @@ extension TrinityCompoundMetricCard where BottomContent == EmptyView {
             lastUpdated: lastUpdated,
             onTap: onTap,
             rows: rows,
+            tint: tint,
             trailingContent: trailingContent,
             bottomContent: { EmptyView() }
         )
@@ -235,7 +242,8 @@ extension TrinityCompoundMetricCard where Trailing == EmptyView, BottomContent =
         unit: String? = nil,
         lastUpdated: Date? = nil,
         onTap: (() -> Void)? = nil,
-        rows: [Row] = []
+        rows: [Row] = [],
+        tint: Color? = nil
     ) {
         self.init(
             label: label,
@@ -244,6 +252,7 @@ extension TrinityCompoundMetricCard where Trailing == EmptyView, BottomContent =
             lastUpdated: lastUpdated,
             onTap: onTap,
             rows: rows,
+            tint: tint,
             trailingContent: { EmptyView() },
             bottomContent: { EmptyView() }
         )

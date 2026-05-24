@@ -22,22 +22,28 @@ import TrinityTheme
 ///     TrinityProgressRing(value: 0.72, centreLabel: "72%", captionLabel: "GOAL")
 /// }
 /// ```
+/// A supplementary metric row shown beneath the hero value in a
+/// `TrinityCompoundMetricCard`. Top-level so callers can hold typed arrays
+/// without needing to specialise the generic card type.
+public struct TrinityCompoundMetricRow: Identifiable {
+    public let id = UUID()
+    public let label: String
+    public let value: String
+    public let unit: String?
+
+    public init(label: String, value: String, unit: String? = nil) {
+        self.label = label
+        self.value = value
+        self.unit = unit
+    }
+}
+
 public struct TrinityCompoundMetricCard<Trailing: View, BottomContent: View>: View {
 
     // MARK: - Types
 
-    public struct Row: Identifiable {
-        public let id = UUID()
-        public let label: String
-        public let value: String
-        public let unit: String?
-
-        public init(label: String, value: String, unit: String? = nil) {
-            self.label = label
-            self.value = value
-            self.unit = unit
-        }
-    }
+    /// Backward-compatible alias — prefer `TrinityCompoundMetricRow` in new code.
+    public typealias Row = TrinityCompoundMetricRow
 
     // MARK: - Properties
 

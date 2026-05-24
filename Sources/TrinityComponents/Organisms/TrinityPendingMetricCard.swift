@@ -42,7 +42,7 @@ public struct TrinityPendingMetricCard: View {
             value: heroValue,
             unit: unit,
             rows: rowLabels.map {
-                TrinityCompoundMetricCard.Row(label: $0, value: "—", unit: unit)
+                TrinityCompoundMetricRow(label: $0, value: "—", unit: unit)
             },
             trailingContent: {
                 RoundedRectangle(cornerRadius: TrinityRadii.button)

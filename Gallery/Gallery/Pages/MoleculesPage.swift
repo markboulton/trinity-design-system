@@ -12,6 +12,7 @@ struct MoleculesPage: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: TrinitySpacing.sectionSpacing) {
+                sectionHeaderSection
                 cardHeaderSection
                 metricCardSection
                 cardSection
@@ -22,6 +23,8 @@ struct MoleculesPage: View {
                 wellnessDotSection
                 metricInsightSection
                 infoBannerSection
+                countdownArcSection
+                markerBarSection
             }
             .padding(TrinitySpacing.sectionPadding)
         }
@@ -175,6 +178,64 @@ struct MoleculesPage: View {
                 message: "Could not reach Intervals.icu")
             TrinityInfoBanner(severity: .success, title: "Connected",
                 message: "Strava data is now syncing.")
+        }
+    }
+
+    private var sectionHeaderSection: some View {
+        VStack(alignment: .leading, spacing: TrinitySpacing.md) {
+            Text("TrinitySectionHeader").font(TrinityTypography.titleMedium)
+            TrinitySectionHeader(title: "Blood Work")
+            TrinitySectionHeader(
+                title: "Insights",
+                trailingAction: .init(label: "See all") {}
+            )
+        }
+    }
+
+    private var countdownArcSection: some View {
+        VStack(alignment: .leading, spacing: TrinitySpacing.md) {
+            Text("TrinityCountdownArc").font(TrinityTypography.titleMedium)
+            HStack(spacing: TrinitySpacing.xl) {
+                TrinityCountdownArc(daysRemaining: 3, totalDays: 7, label: "Test Cyp")
+                TrinityCountdownArc(daysRemaining: 1, totalDays: 7, label: "HCG")
+                TrinityCountdownArc(daysRemaining: 0, totalDays: 7, label: "Inject Today")
+            }
+        }
+    }
+
+    private var markerBarSection: some View {
+        VStack(alignment: .leading, spacing: TrinitySpacing.md) {
+            Text("TrinityMarkerRow").font(TrinityTypography.titleMedium)
+            TrinityCard {
+                VStack(spacing: 0) {
+                    TrinityMarkerRow(
+                        name: "Total Testosterone",
+                        value: 24.6,
+                        unit: "nmol/L",
+                        rangeLow: 8.6,
+                        rangeHigh: 29.0
+                    )
+                    .padding(.horizontal, TrinitySpacing.cardPadding)
+                    Divider()
+                        .padding(.horizontal, TrinitySpacing.cardPadding)
+                    TrinityMarkerRow(
+                        name: "Haematocrit",
+                        value: 51.2,
+                        unit: "%",
+                        rangeLow: 38.0,
+                        rangeHigh: 50.0
+                    )
+                    .padding(.horizontal, TrinitySpacing.cardPadding)
+                    Divider()
+                        .padding(.horizontal, TrinitySpacing.cardPadding)
+                    TrinityMarkerRow(
+                        name: "HDL Cholesterol",
+                        value: 59.0,
+                        unit: "mg/dL"
+                    )
+                    .padding(.horizontal, TrinitySpacing.cardPadding)
+                }
+            }
         }
     }
 

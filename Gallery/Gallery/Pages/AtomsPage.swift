@@ -11,6 +11,9 @@ struct AtomsPage: View {
     @State private var chipOn: Bool = false
     @State private var chipSeverity: Int = 1
     @State private var fieldText: String = ""
+    @State private var scaleValue: Int = 3
+    @State private var invertedScaleValue: Int = 2
+    @State private var weekdaySelection: Set<Int> = [3, 6]
 
     private let filterOptions = ["Day", "Week", "Month"]
     private let sampleLine: [Double] = [240, 242, 245, 243, 248, 246, 250, 248]
@@ -25,12 +28,16 @@ struct AtomsPage: View {
                 segmentedFilterSection
                 progressSection
                 toggleChipSection
+                scaleSelectorSection
                 textFieldSection
                 pulseLoaderSection
                 lineSparklineSection
                 barSparklineSection
                 skeletonSection
                 flowLayoutSection
+                dateNavigatorSection
+                healthKitSyncSection
+                weekdayPickerSection
             }
             .padding(TrinitySpacing.sectionPadding)
         }
@@ -159,6 +166,51 @@ struct AtomsPage: View {
             TrinitySkeletonView(height: 60)
             TrinitySkeletonView(height: 100)
             TrinitySkeletonView(height: 40, cornerRadius: 4)
+        }
+    }
+
+    private var scaleSelectorSection: some View {
+        VStack(alignment: .leading, spacing: TrinitySpacing.md) {
+            Text("TrinityScaleSelector").font(TrinityTypography.titleMedium)
+            TrinityScaleSelector(label: "Energy", value: $scaleValue)
+            TrinityScaleSelector(label: "Sleep", value: $scaleValue, sourceLabel: "From Apple Watch")
+            TrinityScaleSelector(label: "Anxiety", value: $invertedScaleValue, isInverted: true)
+        }
+    }
+
+    private var dateNavigatorSection: some View {
+        VStack(alignment: .leading, spacing: TrinitySpacing.md) {
+            Text("TrinityDateNavigator").font(TrinityTypography.titleMedium)
+            TrinityDateNavigator(
+                title: "April 2026",
+                canGoBack: true,
+                canGoForward: false,
+                onBack: {},
+                onForward: {}
+            )
+            TrinityDateNavigator(
+                title: "Week 18",
+                canGoBack: true,
+                canGoForward: true,
+                onBack: {},
+                onForward: {}
+            )
+        }
+    }
+
+    private var healthKitSyncSection: some View {
+        VStack(alignment: .leading, spacing: TrinitySpacing.md) {
+            Text("TrinityHealthKitSyncIndicator").font(TrinityTypography.titleMedium)
+            TrinityHealthKitSyncIndicator(state: .syncing("Syncing HealthKit"))
+            TrinityHealthKitSyncIndicator(state: .synced(nil), isAnalysing: true)
+            TrinityHealthKitSyncIndicator(state: .synced(Date(timeIntervalSinceNow: -120)))
+        }
+    }
+
+    private var weekdayPickerSection: some View {
+        VStack(alignment: .leading, spacing: TrinitySpacing.md) {
+            Text("TrinityWeekdayPicker").font(TrinityTypography.titleMedium)
+            TrinityWeekdayPicker(selection: $weekdaySelection)
         }
     }
 

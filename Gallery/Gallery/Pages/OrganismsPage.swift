@@ -51,7 +51,7 @@ struct OrganismsPage: View {
                 trendChartSection
                 multiSeriesChartSection
                 rangeChartSection
-                detailPageNote
+                detailPageSection
             }
             .padding(TrinitySpacing.sectionPadding)
         }
@@ -150,12 +150,30 @@ struct OrganismsPage: View {
         }
     }
 
-    private var detailPageNote: some View {
-        VStack(alignment: .leading, spacing: TrinitySpacing.sm) {
+    private var detailPageSection: some View {
+        VStack(alignment: .leading, spacing: TrinitySpacing.md) {
             Text("TrinityDetailPage").font(TrinityTypography.titleMedium)
-            Text("A full-screen navigation wrapper — see VeloReady and TRT Companion for live usage.")
-                .font(TrinityTypography.body)
-                .foregroundStyle(theme.labelSecondary)
+            NavigationLink("Open Detail Page →") {
+                TrinityDetailPage(
+                    title: "Resting Heart Rate",
+                    subtitle: "7-day average: 58 bpm",
+                    chart: {
+                        RoundedRectangle(cornerRadius: TrinityRadii.card)
+                            .fill(theme.accent.opacity(TrinityOpacity.tonalFill))
+                    },
+                    narrativeTitle: "What this means",
+                    narrative: "Your resting heart rate has trended downward over the past 4 weeks, suggesting improved cardiovascular fitness and recovery.",
+                    evidence: [
+                        .init(label: "Sample size", value: "28 days"),
+                        .init(label: "Lowest reading", value: "52 bpm"),
+                        .init(label: "7-day avg", value: "58 bpm")
+                    ],
+                    disclaimer: "Data read from Apple Health. Not for clinical use."
+                )
+                .navigationTitle("Heart Rate")
+            }
+            .font(TrinityTypography.subheadlineEmphasis)
+            .foregroundStyle(theme.accent)
         }
     }
 }

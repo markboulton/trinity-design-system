@@ -180,7 +180,7 @@ public struct TrinityCompoundMetricCard<Trailing: View, BottomContent: View>: Vi
             HStack(alignment: .center, spacing: TrinitySpacing.md) {
                 HStack(alignment: .firstTextBaseline, spacing: TrinitySpacing.xxs) {
                     Text(value)
-                        .font(TrinityTypography.numericLarge)
+                        .font(theme.metricValueFont)
                         .foregroundStyle(theme.labelPrimary)
 
                     if let unit {

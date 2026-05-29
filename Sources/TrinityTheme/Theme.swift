@@ -1,4 +1,5 @@
 import SwiftUI
+import TrinityTokens
 
 /// The single point of variation between Trinity-consuming apps.
 ///
@@ -47,4 +48,18 @@ public protocol Theme {
     var chartSecondary: Color { get }
     var chartGrid: Color { get }
     var chartAxis: Color { get }
+
+    // MARK: - Typography overrides
+
+    /// Font for the hero value in `TrinityCompoundMetricCard`. Defaults to
+    /// `TrinityTypography.numericLarge` (34pt IBM Plex Mono Bold). Apps may override
+    /// the weight or typeface of metric-card hero numbers without forking the
+    /// component — e.g. TRT Companion overrides this to Inter Medium.
+    var metricValueFont: Font { get }
+}
+
+public extension Theme {
+    /// Default keeps the historic bold mono hero, so existing consumers
+    /// (GymReady, VeloReady, Meso) are unchanged unless they opt in.
+    var metricValueFont: Font { TrinityTypography.numericLarge }
 }

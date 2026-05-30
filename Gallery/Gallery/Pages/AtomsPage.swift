@@ -27,6 +27,7 @@ struct AtomsPage: View {
                 statusBadgeSection
                 segmentedFilterSection
                 progressSection
+                openArcGaugeSection
                 toggleChipSection
                 scaleSelectorSection
                 textFieldSection
@@ -42,6 +43,18 @@ struct AtomsPage: View {
             .padding(TrinitySpacing.sectionPadding)
         }
         .navigationTitle("Atoms")
+    }
+
+    private var openArcGaugeSection: some View {
+        VStack(alignment: .leading, spacing: TrinitySpacing.md) {
+            Text("TrinityOpenArcGauge").font(TrinityTypography.titleMedium)
+            HStack(spacing: TrinitySpacing.xl) {
+                TrinityOpenArcGauge(value: 84, minValue: 0, maxValue: 100, label: "Readiness",
+                                    displayText: "84", tint: TrinityStatusColors.success, baseline: 90)
+                TrinityOpenArcGauge(value: 268, minValue: 150, maxValue: 350, label: "Fitness",
+                                    displayText: "268", unit: "W")
+            }
+        }
     }
 
     private var buttonSection: some View {

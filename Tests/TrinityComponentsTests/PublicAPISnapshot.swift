@@ -501,6 +501,15 @@ struct AtomSurfaceTests {
         _ = TrinityProgressRing(value: 0.5, tint: .blue, centreLabel: "50%", captionLabel: "RANGE", size: 80, lineWidth: 6)
     }
 
+    @Test func openArcGauge() {
+        _ = TrinityOpenArcGauge(value: 84, minValue: 0, maxValue: 100, label: "Readiness", displayText: "84")
+        _ = TrinityOpenArcGauge(value: 268, minValue: 150, maxValue: 350, label: "Fitness",
+                                displayText: "268", unit: "W", tint: .blue, baseline: 90)
+        _ = TrinityOpenArcGauge(value: 84, minValue: 0, maxValue: 100, label: "Readiness",
+                                displayText: "84", tintForFraction: { _ in .green }, baseline: 90,
+                                size: 100, lineWidth: 5, sweepDegrees: 270)
+    }
+
     @Test func pulseLoader() {
         _ = TrinityPulseLoader()
         _ = TrinityPulseLoader(size: 60, lineWidth: 4)

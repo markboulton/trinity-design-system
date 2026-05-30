@@ -1,0 +1,178 @@
+import SwiftUI
+import TrinityTokens
+import TrinityTheme
+
+// Match VeloReady's existing compact ring exactly: 100pt diameter, 5pt stroke
+// (ComponentSizes.ringDiameterSmall / ringWidthSmall). Retained per requirement.
+@usableFromInline let openArcGaugeDefaultSize: CGFloat = 100
+@usableFromInline let openArcGaugeDefaultLineWidth: CGFloat = 5
+
+/// An open arc stroke whose fill fraction is animatable.
+struct OpenArc: Shape {
+    var fraction: Double
+    var sweepDegrees: Double
+
+    var animatableData: Double {
+        get { fraction }
+        set { fraction = newValue }
+    }
+
+    func path(in rect: CGRect) -> Path {
+        let radius = min(rect.width, rect.height) / 2 - 0
+        let centre = CGPoint(x: rect.midX, y: rect.midY)
+        let start = TrinityArcGeometry.startAngleDegrees(sweepDegrees: sweepDegrees)
+        let end = TrinityArcGeometry.fillEndAngleDegrees(fraction: fraction, sweepDegrees: sweepDegrees)
+        var path = Path()
+        path.addArc(
+            center: centre,
+            radius: radius,
+            startAngle: .degrees(start),
+            endAngle: .degrees(end),
+            clockwise: false
+        )
+        return path
+    }
+}
+
+/// Animatable fill that re-evaluates its colour from the *current animated fraction*
+/// every frame — this is what lets the Readiness fill cycle colour as it sweeps
+/// (faithfully retaining VeloReady's `AnimatableReadinessRing` behaviour). Used only
+/// when a `tintForFraction` closure is supplied; otherwise the static-tint fill is used.
+struct AnimatableArcFill: View, Animatable {
+    var fraction: Double
+    var sweepDegrees: Double
+    var lineWidth: CGFloat
+    var colorForFraction: (Double) -> Color
+
+    var animatableData: Double {
+        get { fraction }
+        set { fraction = newValue }
+    }
+
+    var body: some View {
+        OpenArc(fraction: fraction, sweepDegrees: sweepDegrees)
+            .stroke(colorForFraction(fraction), style: StrokeStyle(lineWidth: lineWidth, lineCap: .round))
+    }
+}
+
+/// SpaceX-telemetry-style open-bottom arc gauge: an open ~270° arc with a
+/// caps label / value / unit stack centred inside, and an optional baseline arc.
+public struct TrinityOpenArcGauge: View {
+    @Environment(\.theme) private var theme
+
+    public let value: Double
+    public let minValue: Double
+    public let maxValue: Double
+    /// Caps definition label shown ABOVE the value, inside the arc (e.g. "READINESS").
+    public let label: String
+    /// Large numeral shown in the centre (e.g. "84" or "268").
+    public let displayText: String
+    /// Optional unit shown below the value (e.g. "W"). Pass nil for none.
+    public let unit: String?
+    /// Fill colour. Pass nil to use the theme accent. Ignored if `tintForFraction` is set.
+    public let tint: Color?
+    /// Optional colour-by-fraction mapping. When supplied, the fill cycles colour as it
+    /// animates (retains VeloReady's status-colour-by-progress ring behaviour).
+    public let tintForFraction: ((Double) -> Color)?
+    /// Optional reference level drawn as a faint arc under the fill (e.g. Readiness baseline).
+    public let baseline: Double?
+    public let size: CGFloat
+    public let lineWidth: CGFloat
+    public let sweepDegrees: Double
+
+    public init(
+        value: Double,
+        minValue: Double,
+        maxValue: Double,
+        label: String,
+        displayText: String,
+        unit: String? = nil,
+        tint: Color? = nil,
+        tintForFraction: ((Double) -> Color)? = nil,
+        baseline: Double? = nil,
+        size: CGFloat = openArcGaugeDefaultSize,
+        lineWidth: CGFloat = openArcGaugeDefaultLineWidth,
+        sweepDegrees: Double = TrinityArcGeometry.defaultSweepDegrees
+    ) {
+        self.value = value
+        self.minValue = minValue
+        self.maxValue = maxValue
+        self.label = label
+        self.displayText = displayText
+        self.unit = unit
+        self.tint = tint
+        self.tintForFraction = tintForFraction
+        self.baseline = baseline
+        self.size = size
+        self.lineWidth = lineWidth
+        self.sweepDegrees = sweepDegrees
+    }
+
+    private var fraction: Double {
+        TrinityArcGeometry.fraction(value: value, min: minValue, max: maxValue)
+    }
+
+    private var baselineFraction: Double? {
+        baseline.map { TrinityArcGeometry.fraction(value: $0, min: minValue, max: maxValue) }
+    }
+
+    private var stroke: StrokeStyle { StrokeStyle(lineWidth: lineWidth, lineCap: .round) }
+
+    public var body: some View {
+        ZStack {
+            // Track (full sweep, faint)
+            OpenArc(fraction: 1, sweepDegrees: sweepDegrees)
+                .stroke(theme.labelSecondary.opacity(TrinityOpacity.tonalFill), style: stroke)
+
+            // Optional baseline arc (under the fill)
+            if let baselineFraction {
+                OpenArc(fraction: baselineFraction, sweepDegrees: sweepDegrees)
+                    .stroke((tint ?? theme.accent).opacity(TrinityOpacity.subtle), style: stroke)
+            }
+
+            // Fill — colour-cycling when tintForFraction is supplied, else static tint.
+            if let tintForFraction {
+                AnimatableArcFill(
+                    fraction: fraction,
+                    sweepDegrees: sweepDegrees,
+                    lineWidth: lineWidth,
+                    colorForFraction: tintForFraction
+                )
+            } else {
+                OpenArc(fraction: fraction, sweepDegrees: sweepDegrees)
+                    .stroke(tint ?? theme.accent, style: stroke)
+            }
+
+            // Centre stack: caps label / value / unit
+            VStack(spacing: TrinitySpacing.hairline) {
+                Text(label.uppercased())
+                    .font(TrinityTypography.captionSmall)
+                    .foregroundColor(theme.labelSecondary)
+                Text(displayText)
+                    .font(TrinityTypography.numericLarge)
+                    .foregroundColor(theme.labelPrimary)
+                if let unit {
+                    Text(unit.uppercased())
+                        .font(TrinityTypography.captionSmall)
+                        .foregroundColor(theme.labelTertiary)
+                }
+            }
+        }
+        .frame(width: size, height: size)
+    }
+}
+
+#if canImport(UIKit)
+#Preview("Open arc gauges") {
+    HStack(spacing: TrinitySpacing.xl) {
+        TrinityOpenArcGauge(value: 84, minValue: 0, maxValue: 100, label: "Readiness",
+                            displayText: "84", tint: TrinityStatusColors.success, baseline: 90)
+        TrinityOpenArcGauge(value: 62, minValue: 0, maxValue: 100, label: "Load",
+                            displayText: "62", tint: TrinityStatusColors.caution)
+        TrinityOpenArcGauge(value: 268, minValue: 150, maxValue: 350, label: "Fitness",
+                            displayText: "268", unit: "W")
+    }
+    .padding(TrinitySpacing.xxl)
+    .theme(DemoVRTheme())
+}
+#endif

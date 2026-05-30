@@ -27,4 +27,10 @@ struct TrinityArcGeometryTests {
         #expect(TrinityArcGeometry.fillEndAngleDegrees(fraction: 1) == 405)
         #expect(TrinityArcGeometry.fillEndAngleDegrees(fraction: 2) == 405) // clamped
     }
+
+    @Test func customSweepAngles() {
+        #expect(TrinityArcGeometry.startAngleDegrees(sweepDegrees: 180) == 180)
+        #expect(TrinityArcGeometry.endAngleDegrees(sweepDegrees: 180) == 360)
+        #expect(TrinityArcGeometry.fillEndAngleDegrees(fraction: 0.5, sweepDegrees: 180) == 270)
+    }
 }

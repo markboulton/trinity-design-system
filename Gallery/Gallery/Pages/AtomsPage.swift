@@ -53,7 +53,20 @@ struct AtomsPage: View {
                                     displayText: "84", tint: TrinityStatusColors.success, baseline: 90)
                 TrinityOpenArcGauge(value: 268, minValue: 150, maxValue: 350, label: "Fitness",
                                     displayText: "268", unit: "W")
+                // Colour-cycling: fill colour tracks the animated fraction via a band-based closure.
+                TrinityOpenArcGauge(value: 62, minValue: 0, maxValue: 100, label: "Readiness",
+                                    displayText: "62", tintForFraction: bandColor(for:), baseline: 80)
             }
+        }
+    }
+
+    /// Band-based colour used to demo the `tintForFraction:` colour-cycling path.
+    private func bandColor(for fraction: Double) -> Color {
+        switch fraction {
+        case 0.8...: return TrinityStatusColors.success
+        case 0.6..<0.8: return TrinityStatusColors.caution
+        case 0.4..<0.6: return TrinityStatusColors.warning
+        default: return TrinityStatusColors.error
         }
     }
 

@@ -2,11 +2,6 @@ import SwiftUI
 import TrinityTokens
 import TrinityTheme
 
-// Match VeloReady's existing compact ring exactly: 100pt diameter, 5pt stroke
-// (ComponentSizes.ringDiameterSmall / ringWidthSmall). Retained per requirement.
-@usableFromInline let openArcGaugeDefaultSize: CGFloat = 100
-@usableFromInline let openArcGaugeDefaultLineWidth: CGFloat = 5
-
 /// An open arc stroke whose fill fraction is animatable.
 struct OpenArc: Shape {
     var fraction: Double
@@ -18,7 +13,7 @@ struct OpenArc: Shape {
     }
 
     func path(in rect: CGRect) -> Path {
-        let radius = min(rect.width, rect.height) / 2 - 0
+        let radius = min(rect.width, rect.height) / 2
         let centre = CGPoint(x: rect.midX, y: rect.midY)
         let start = TrinityArcGeometry.startAngleDegrees(sweepDegrees: sweepDegrees)
         let end = TrinityArcGeometry.fillEndAngleDegrees(fraction: fraction, sweepDegrees: sweepDegrees)
@@ -58,6 +53,12 @@ struct AnimatableArcFill: View, Animatable {
 /// SpaceX-telemetry-style open-bottom arc gauge: an open ~270° arc with a
 /// caps label / value / unit stack centred inside, and an optional baseline arc.
 public struct TrinityOpenArcGauge: View {
+    // Match VeloReady's existing compact ring exactly: 100pt diameter, 5pt stroke
+    // (ComponentSizes.ringDiameterSmall / ringWidthSmall). Retained per requirement.
+    // @usableFromInline is required because these back default arguments on the public init.
+    @usableFromInline static let defaultSize: CGFloat = 100
+    @usableFromInline static let defaultLineWidth: CGFloat = 5
+
     @Environment(\.theme) private var theme
 
     public let value: Double
@@ -90,8 +91,8 @@ public struct TrinityOpenArcGauge: View {
         tint: Color? = nil,
         tintForFraction: ((Double) -> Color)? = nil,
         baseline: Double? = nil,
-        size: CGFloat = openArcGaugeDefaultSize,
-        lineWidth: CGFloat = openArcGaugeDefaultLineWidth,
+        size: CGFloat = defaultSize,
+        lineWidth: CGFloat = defaultLineWidth,
         sweepDegrees: Double = TrinityArcGeometry.defaultSweepDegrees
     ) {
         self.value = value
@@ -147,18 +148,22 @@ public struct TrinityOpenArcGauge: View {
             VStack(spacing: TrinitySpacing.hairline) {
                 Text(label.uppercased())
                     .font(TrinityTypography.captionSmall)
-                    .foregroundColor(theme.labelSecondary)
+                    .foregroundStyle(theme.labelSecondary)
                 Text(displayText)
                     .font(TrinityTypography.numericLarge)
-                    .foregroundColor(theme.labelPrimary)
+                    .foregroundStyle(theme.labelPrimary)
                 if let unit {
                     Text(unit.uppercased())
                         .font(TrinityTypography.captionSmall)
-                        .foregroundColor(theme.labelTertiary)
+                        .foregroundStyle(theme.labelTertiary)
                 }
             }
         }
-        .frame(width: size, height: size)
+        .frame(width: size - lineWidth, height: size - lineWidth)  // shapes see inset rect → no clip
+        .frame(width: size, height: size)                          // external footprint unchanged
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(label)
+        .accessibilityValue(unit != nil ? "\(displayText) \(unit!)" : displayText)
     }
 }
 

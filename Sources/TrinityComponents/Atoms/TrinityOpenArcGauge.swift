@@ -125,8 +125,10 @@ public struct TrinityOpenArcGauge: View {
 
     /// Metric (numeral) centre relative to the dial centre — slightly low for optical alignment.
     private var metricCentreY: CGFloat { size * 0.05 }
-    /// Distance of the caps label above the metric (and the unit below it).
-    private var titleGap: CGFloat { size * 0.13 }
+    /// Distance of the caps label above the metric.
+    private var titleGap: CGFloat { size * 0.23 }
+    /// Distance of the optional unit below the metric.
+    private var unitGap: CGFloat { size * 0.13 }
 
     public var body: some View {
         ZStack {
@@ -175,7 +177,7 @@ public struct TrinityOpenArcGauge: View {
                     Text(unit.uppercased())
                         .font(TrinityTypography.captionSmall)
                         .foregroundStyle(theme.labelTertiary)
-                        .offset(y: metricCentreY + titleGap)
+                        .offset(y: metricCentreY + unitGap)
                 }
             }
         }

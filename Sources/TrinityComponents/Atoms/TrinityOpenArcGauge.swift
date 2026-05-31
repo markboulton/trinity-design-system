@@ -123,9 +123,10 @@ public struct TrinityOpenArcGauge: View {
 
     private var stroke: StrokeStyle { StrokeStyle(lineWidth: lineWidth, lineCap: .round) }
 
-    /// Drops the centred label+metric group a touch for optical alignment against the
-    /// open-bottom arc (its optical centre sits slightly above geometric centre).
-    private var contentDropOffset: CGFloat { size * 0.12 }
+    /// Metric (numeral) centre relative to the dial centre — slightly low for optical alignment.
+    private var metricCentreY: CGFloat { size * 0.05 }
+    /// Distance of the caps label above the metric (and the unit below it).
+    private var titleGap: CGFloat { size * 0.13 }
 
     public var body: some View {
         ZStack {
@@ -154,24 +155,29 @@ public struct TrinityOpenArcGauge: View {
                     .stroke(tint ?? theme.accent, style: stroke)
             }
 
-            // Centre content: caps label + metric (+ optional unit) form ONE vertically-centred
-            // group with breathing room between label and metric, then dropped a touch for
-            // optical alignment against the open-bottom arc.
-            VStack(spacing: TrinitySpacing.xs) {
-                Text(label.uppercased())
-                    .font(TrinityTypography.captionSmall)
-                    .foregroundStyle(theme.labelSecondary)
+            // Centre content: the metric sits just below the dial centre (optical alignment
+            // with the open-bottom arc); the caps label a short fixed distance above it; the
+            // optional unit the same distance below. Independent offsets keep the title↔metric
+            // gap tight regardless of element sizes.
+            ZStack {
                 Text(displayText)
                     .font(TrinityTypography.numericLarge)
                     .foregroundStyle(theme.labelPrimary)
                     .opacity(numberOpacity)
+                    .offset(y: metricCentreY)
+
+                Text(label.uppercased())
+                    .font(TrinityTypography.captionSmall)
+                    .foregroundStyle(theme.labelSecondary)
+                    .offset(y: metricCentreY - titleGap)
+
                 if let unit {
                     Text(unit.uppercased())
                         .font(TrinityTypography.captionSmall)
                         .foregroundStyle(theme.labelTertiary)
+                        .offset(y: metricCentreY + titleGap)
                 }
             }
-            .offset(y: contentDropOffset)
         }
         .frame(width: size - lineWidth, height: size - lineWidth)  // shapes see inset rect → no clip
         .frame(width: size, height: size)                          // external footprint unchanged

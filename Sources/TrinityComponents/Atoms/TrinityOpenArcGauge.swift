@@ -123,9 +123,12 @@ public struct TrinityOpenArcGauge: View {
 
     private var stroke: StrokeStyle { StrokeStyle(lineWidth: lineWidth, lineCap: .round) }
 
-    /// Vertical distance from centre to the raised caps label (and to the unit below).
-    /// Scales with the gauge so the label clears the numeral at any size.
-    private var labelInset: CGFloat { size * 0.22 }
+    /// Vertical distance from the numeral to the caps label above (and the unit below).
+    private var labelInset: CGFloat { size * 0.18 }
+
+    /// Pushes the whole centre block down so the numeral sits low in the dial (near the
+    /// open bottom), with the caps heading just above it.
+    private var contentYOffset: CGFloat { size * 0.16 }
 
     public var body: some View {
         ZStack {
@@ -133,10 +136,11 @@ public struct TrinityOpenArcGauge: View {
             OpenArc(fraction: 1, sweepDegrees: sweepDegrees)
                 .stroke(theme.labelSecondary.opacity(TrinityOpacity.tonalFill), style: stroke)
 
-            // Optional baseline arc (under the fill)
+            // Optional baseline arc (under the fill) — a lighter tint of the FOREGROUND
+            // colour (the fill's colour at the baseline level), not the theme accent.
             if let baselineFraction {
                 OpenArc(fraction: baselineFraction, sweepDegrees: sweepDegrees)
-                    .stroke((tint ?? theme.accent).opacity(TrinityOpacity.subtle), style: stroke)
+                    .stroke((tintForFraction?(baselineFraction) ?? tint ?? theme.accent).opacity(TrinityOpacity.subtle), style: stroke)
             }
 
             // Fill — colour-cycling when tintForFraction is supplied, else static tint.
@@ -174,6 +178,7 @@ public struct TrinityOpenArcGauge: View {
                         .offset(y: labelInset)
                 }
             }
+            .offset(y: contentYOffset)
         }
         .frame(width: size - lineWidth, height: size - lineWidth)  // shapes see inset rect → no clip
         .frame(width: size, height: size)                          // external footprint unchanged

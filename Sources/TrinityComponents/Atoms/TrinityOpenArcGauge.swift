@@ -123,12 +123,9 @@ public struct TrinityOpenArcGauge: View {
 
     private var stroke: StrokeStyle { StrokeStyle(lineWidth: lineWidth, lineCap: .round) }
 
-    /// Vertical distance from the numeral to the caps label above (and the unit below).
-    private var labelInset: CGFloat { size * 0.18 }
-
-    /// Pushes the whole centre block down so the numeral sits low in the dial (near the
-    /// open bottom), with the caps heading just above it.
-    private var contentYOffset: CGFloat { size * 0.16 }
+    /// Drops the centred label+metric group a touch for optical alignment against the
+    /// open-bottom arc (its optical centre sits slightly above geometric centre).
+    private var contentDropOffset: CGFloat { size * 0.12 }
 
     public var body: some View {
         ZStack {
@@ -139,8 +136,9 @@ public struct TrinityOpenArcGauge: View {
             // Optional baseline arc (under the fill) — a lighter tint of the FOREGROUND
             // colour (the fill's colour at the baseline level), not the theme accent.
             if let baselineFraction {
+                // 0.3 matches the original ring's faded-recovery baseline opacity.
                 OpenArc(fraction: baselineFraction, sweepDegrees: sweepDegrees)
-                    .stroke((tintForFraction?(baselineFraction) ?? tint ?? theme.accent).opacity(TrinityOpacity.subtle), style: stroke)
+                    .stroke((tintForFraction?(baselineFraction) ?? tint ?? theme.accent).opacity(0.3), style: stroke)
             }
 
             // Fill — colour-cycling when tintForFraction is supplied, else static tint.
@@ -156,29 +154,24 @@ public struct TrinityOpenArcGauge: View {
                     .stroke(tint ?? theme.accent, style: stroke)
             }
 
-            // Centre content (SpaceX telemetry layout): the numeral is anchored at the
-            // gauge centre; the caps label sits raised in the upper region; the unit sits
-            // below. Using offsets (not a centred VStack) keeps the number visually centred
-            // and the label clear of it regardless of whether a unit is present.
-            ZStack {
+            // Centre content: caps label + metric (+ optional unit) form ONE vertically-centred
+            // group with breathing room between label and metric, then dropped a touch for
+            // optical alignment against the open-bottom arc.
+            VStack(spacing: TrinitySpacing.xs) {
+                Text(label.uppercased())
+                    .font(TrinityTypography.captionSmall)
+                    .foregroundStyle(theme.labelSecondary)
                 Text(displayText)
                     .font(TrinityTypography.numericLarge)
                     .foregroundStyle(theme.labelPrimary)
                     .opacity(numberOpacity)
-
-                Text(label.uppercased())
-                    .font(TrinityTypography.captionSmall)
-                    .foregroundStyle(theme.labelSecondary)
-                    .offset(y: -labelInset)
-
                 if let unit {
                     Text(unit.uppercased())
                         .font(TrinityTypography.captionSmall)
                         .foregroundStyle(theme.labelTertiary)
-                        .offset(y: labelInset)
                 }
             }
-            .offset(y: contentYOffset)
+            .offset(y: contentDropOffset)
         }
         .frame(width: size - lineWidth, height: size - lineWidth)  // shapes see inset rect → no clip
         .frame(width: size, height: size)                          // external footprint unchanged

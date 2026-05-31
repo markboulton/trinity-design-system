@@ -68,6 +68,8 @@ public struct TrinityOpenArcGauge: View {
     public let label: String
     /// Large numeral shown in the centre (e.g. "84" or "268").
     public let displayText: String
+    /// Opacity of the centre numeral, for an independent fade-in. Default 1.
+    public let numberOpacity: Double
     /// Optional unit shown below the value (e.g. "W"). Pass nil for none.
     public let unit: String?
     /// Fill colour. Pass nil to use the theme accent. Ignored if `tintForFraction` is set.
@@ -87,6 +89,7 @@ public struct TrinityOpenArcGauge: View {
         maxValue: Double,
         label: String,
         displayText: String,
+        numberOpacity: Double = 1,
         unit: String? = nil,
         tint: Color? = nil,
         tintForFraction: ((Double) -> Color)? = nil,
@@ -100,6 +103,7 @@ public struct TrinityOpenArcGauge: View {
         self.maxValue = maxValue
         self.label = label
         self.displayText = displayText
+        self.numberOpacity = numberOpacity
         self.unit = unit
         self.tint = tint
         self.tintForFraction = tintForFraction
@@ -118,6 +122,10 @@ public struct TrinityOpenArcGauge: View {
     }
 
     private var stroke: StrokeStyle { StrokeStyle(lineWidth: lineWidth, lineCap: .round) }
+
+    /// Vertical distance from centre to the raised caps label (and to the unit below).
+    /// Scales with the gauge so the label clears the numeral at any size.
+    private var labelInset: CGFloat { size * 0.22 }
 
     public var body: some View {
         ZStack {
@@ -144,18 +152,26 @@ public struct TrinityOpenArcGauge: View {
                     .stroke(tint ?? theme.accent, style: stroke)
             }
 
-            // Centre stack: caps label / value / unit
-            VStack(spacing: TrinitySpacing.hairline) {
-                Text(label.uppercased())
-                    .font(TrinityTypography.captionSmall)
-                    .foregroundStyle(theme.labelSecondary)
+            // Centre content (SpaceX telemetry layout): the numeral is anchored at the
+            // gauge centre; the caps label sits raised in the upper region; the unit sits
+            // below. Using offsets (not a centred VStack) keeps the number visually centred
+            // and the label clear of it regardless of whether a unit is present.
+            ZStack {
                 Text(displayText)
                     .font(TrinityTypography.numericLarge)
                     .foregroundStyle(theme.labelPrimary)
+                    .opacity(numberOpacity)
+
+                Text(label.uppercased())
+                    .font(TrinityTypography.captionSmall)
+                    .foregroundStyle(theme.labelSecondary)
+                    .offset(y: -labelInset)
+
                 if let unit {
                     Text(unit.uppercased())
                         .font(TrinityTypography.captionSmall)
                         .foregroundStyle(theme.labelTertiary)
+                        .offset(y: labelInset)
                 }
             }
         }

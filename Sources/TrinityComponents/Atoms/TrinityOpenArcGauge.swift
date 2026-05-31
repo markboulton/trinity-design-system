@@ -130,6 +130,16 @@ public struct TrinityOpenArcGauge: View {
     /// Distance of the optional unit below the metric.
     private var unitGap: CGFloat { size * 0.13 }
 
+    /// Numeral font scales with the gauge so a large gauge shows a large number.
+    /// Calibrated so the ~110pt dial keeps its existing ~34pt numeral.
+    private var numeralFont: Font {
+        Font.custom(TrinityTypography.monoBold, size: size * 0.31, relativeTo: .title)
+    }
+    /// Caps label / unit font, scaled with the gauge (≈11pt at the dial size).
+    private var capsFont: Font {
+        Font.custom(TrinityTypography.fontFamily, size: size * 0.10, relativeTo: .caption2)
+    }
+
     public var body: some View {
         ZStack {
             // Track (full sweep, faint)
@@ -163,19 +173,19 @@ public struct TrinityOpenArcGauge: View {
             // gap tight regardless of element sizes.
             ZStack {
                 Text(displayText)
-                    .font(TrinityTypography.numericLarge)
+                    .font(numeralFont)
                     .foregroundStyle(theme.labelPrimary)
                     .opacity(numberOpacity)
                     .offset(y: metricCentreY)
 
                 Text(label.uppercased())
-                    .font(TrinityTypography.captionSmall)
+                    .font(capsFont)
                     .foregroundStyle(theme.labelSecondary)
                     .offset(y: metricCentreY - titleGap)
 
                 if let unit {
                     Text(unit.uppercased())
-                        .font(TrinityTypography.captionSmall)
+                        .font(capsFont)
                         .foregroundStyle(theme.labelTertiary)
                         .offset(y: metricCentreY + unitGap)
                 }
